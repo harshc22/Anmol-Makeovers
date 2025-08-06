@@ -9,7 +9,14 @@ export default function Home() {
             Enhancing Your Natural Beauty
           </h1>
           <p className="text-base sm:text-lg md:text-xl mb-6 leading-relaxed">
-            I&apos;m Anmol, a certified makeup and hair artist based in the Greater Toronto Area, specializing in bridal, non-bridal, and editorial looks crafted for any occasion.
+            I&apos;m Anmol, a certified makeup and hair artist based in the Greater Toronto Area, specializing in bridal, non-bridal, and editorial looks crafted for any occasion.{' '}
+            <a
+              href = "/about"
+              className = "text-base sm:text-lg md:text-xl mb-6 leading-relaxed border-b border-transparent hover:border-primary hover-border-1 hover:text-primary transition"
+            >
+              Read More
+            </a>
+
           </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <a

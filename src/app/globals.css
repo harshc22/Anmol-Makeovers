@@ -15,6 +15,10 @@
   .hover\:text-primary:hover{
     color: #FB6F92;
   }
+  
+  .hover\:border-primary:hover{
+    border-color: #FB6F92;
+  }
 
   .text-dark {
     color: #1f1f1f;

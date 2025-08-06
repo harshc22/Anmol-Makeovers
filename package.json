@@ -10,10 +10,14 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "framer-motion": "^12.23.12",
     "hamburger-react": "^2.5.2",
-    "next": "15.4.5",
+    "next": "^15.4.5",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-icons": "^5.5.0",
+    "react-intersection-observer": "^9.16.0",
+    "swiper": "^11.2.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
