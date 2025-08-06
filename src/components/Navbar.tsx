@@ -25,7 +25,7 @@ export default function Navbar() {
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
         >
-          <Hamburger toggled={isOpen} toggle={setIsOpen} size={20} direction="bottom"/>
+          <Hamburger toggled={isOpen} toggle={setIsOpen} size={20} direction="right"/>
         </button>
 
         {/* Desktop Links */}
