@@ -31,11 +31,18 @@ export default function RequestQuote() {
     setStep(3)
   }
 
-  const handleEventChange = (index: number, field: string, value: string) => {
+    type EventField = 'eventType' | 'date' | 'time' | 'location' | 'people'
+
+    const handleEventChange = (
+    index: number,
+    field: EventField,
+    value: string
+    ) => {
     const updatedEvents = [...events]
     updatedEvents[index][field] = value
     setEvents(updatedEvents)
-  }
+    }
+
 
   const handleServiceToggle = (index: number, service: string) => {
     const updatedEvents = [...events]
