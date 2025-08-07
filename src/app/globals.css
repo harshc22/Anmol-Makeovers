@@ -29,6 +29,9 @@
   .border-primary {
     border-color: #FB6F92;
   }
+  .border-gray{
+    border-color: lightgray;
+  }
   .text-heading{
     color: #1f1f1f
   }

@@ -3,7 +3,7 @@ import InstagramFeed from '@/components/Instagram'
 export default function Home() {
   return (
     <section className="bg-background text-dark px-4 sm:px-8 py-8 sm:py-10">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-12 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-12 items-center pt-20">
         <div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-semibold mb-6 leading-tight">
             Enhancing Your Natural Beauty
