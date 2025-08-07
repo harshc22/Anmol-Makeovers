@@ -8,6 +8,9 @@
   .bg-primary {
     background-color: #FB6F92;
   }
+  .bg-accent {
+    background-color: #FFC2D1;
+  }
   .hover\:bg-primaryHover:hover {
     background-color: #ff2e63;
   }

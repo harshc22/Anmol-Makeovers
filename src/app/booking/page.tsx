@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 
 export default function BookingHero() {
@@ -27,7 +29,7 @@ export default function BookingHero() {
           From bridal elegance to editorial glam, every look is crafted with care, confidence, and intention.
         </p>
         <a
-          href="/booking/request"
+          href="/request"
           className="inline-block bg-primary text-light text-lg px-8 py-4 rounded-md shadow-md hover:bg-primaryHover transition"
         >
           Request a Quote
