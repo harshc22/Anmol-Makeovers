@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import InstagramFeed from '@/components/Instagram'
 export default function Home() {
   return (
     <section className="bg-background text-dark px-4 sm:px-8 py-8 sm:py-10">
