@@ -15,6 +15,7 @@ export default function RequestQuote() {
         email: '',
         phone: '',
         address: '',
+        notes: '',
     })
 
 
@@ -25,7 +26,7 @@ export default function RequestQuote() {
         setStep(2)
     }
 
-    const [eventError, setEventError] = useState<string | null>(null)
+    const [, setEventError] = useState<string | null>(null)
     const handleContactChange = (field: keyof typeof contactInfo, value: string) => {
         setContactInfo({ ...contactInfo, [field]: value })
     }
@@ -53,16 +54,19 @@ export default function RequestQuote() {
         });
 
         // attach the token to the widget predictions
-        // @ts-ignore (supported at runtime)
+        // @ts-expect-error — sessionToken is valid at runtime
         autocomplete.setOptions({ sessionToken: sessionTokenRef.current });
 
         listener = autocomplete.addListener('place_changed', () => {
-        const place = autocomplete!.getPlace();
-        if (place.formatted_address) {
-            setContactInfo(prev => ({ ...prev, address: place.formatted_address }));
-        }
-        // end the session after a selection; new focus will create a new token
-        sessionTokenRef.current = null;
+            const place = autocomplete!.getPlace();
+            if (place.formatted_address) {
+                setContactInfo(prev => ({
+                    ...prev,
+                    address: place.formatted_address ?? '',
+                    }));
+            }
+            // end the session after a selection; new focus will create a new token
+            sessionTokenRef.current = null;
         });
     });
 
@@ -341,6 +345,14 @@ export default function RequestQuote() {
                 className="w-full px-4 py-4 rounded-md border border-gray bg-background text-dark text-base focus:outline-none focus:border-primary transition"
             />
             </div>
+
+            <textarea
+                placeholder="Additional Notes (optional)"
+                value={contactInfo.notes || ''}
+                onChange={(e) => handleContactChange('notes', e.target.value)}
+                className="w-full px-4 py-4 rounded-md border border-gray bg-background text-dark text-base focus:outline-none focus:border-primary transition"
+                rows={4}
+            />
 
             <div className="mt-6 flex justify-between gap-4">
             <button
