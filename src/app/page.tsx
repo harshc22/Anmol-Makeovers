@@ -10,8 +10,8 @@ export default function Home() {
           <p className="text-base sm:text-lg md:text-xl mb-6 leading-relaxed">
             I&apos;m Anmol, a certified makeup and hair artist based in the Greater Toronto Area, specializing in bridal, non-bridal, and editorial looks crafted for any occasion.{' '}
             <a
-              href = "/about"
-              className = "text-base sm:text-lg md:text-xl mb-6 leading-relaxed border-b border-transparent hover:border-primary hover-border-1 hover:text-primary transition"
+              href="/about"
+              className="text-base sm:text-lg md:text-xl mb-6 leading-relaxed border-b border-transparent hover:border-primary hover-border-1 hover:text-primary transition"
             >
               Read More
             </a>

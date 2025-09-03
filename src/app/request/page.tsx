@@ -372,30 +372,50 @@ export default function RequestQuote() {
     )
 
     const handleSubmitForm = async () => {
+        // Simple email and phone checks
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^[0-9]{10,15}$/; // basic digit length check
+
+        if (!contactInfo.email || !emailRegex.test(contactInfo.email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        if (!contactInfo.phone || !phoneRegex.test(contactInfo.phone.replace(/\D/g, ''))) {
+            alert('Please enter a valid phone number.');
+            return;
+        }
+
+        if (!contactInfo.address.trim()) {
+            alert('Please enter your street address.');
+            return;
+        }
+
         const payload = {
             type: selected,
             events,
             contactInfo
-        }
+        };
 
         try {
             const res = await fetch('/api/quote', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-            })
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
             if (res.ok) {
-            alert('Your request has been sent! You will receive a confirmation shortly.')
-            // optionally reset or redirect
+                alert('Your request has been sent! You will receive a confirmation shortly.');
+                // optionally reset or redirect
             } else {
-            alert('Something went wrong. Please try again.')
+                alert('Something went wrong. Please try again.');
             }
         } catch (err) {
-            console.error(err)
-            alert('Server error. Please try again later.')
+            console.error(err);
+            alert('Server error. Please try again later.');
         }
-    }
+    };
+
 
     return (
         <section className="bg-background pt-25 min-h-screen flex items-center justify-center px-4 py-16">
