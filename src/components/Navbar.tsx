@@ -8,7 +8,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="bg-background px-4 sm:px-6 py-4 shadow-md text-dark">
+    <nav className="bg-background px-4 sm:px-6 py-4 shadow-md text-dark border-b border-gray fixed top-0 right-0 left-0 z-50">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
         <Link
@@ -29,7 +29,7 @@ export default function Navbar() {
         </button>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex gap-4 items-center text-dark">
+        <div className="hidden md:flex gap-10 items-center text-primary font-sans">
           <Link href="/" className="hover:text-primary transition">Home</Link>
           <Link href="/portfolio" className="hover:text-primary transition">Portfolio</Link>
           <Link href="/about" className="hover:text-primary transition">About</Link>

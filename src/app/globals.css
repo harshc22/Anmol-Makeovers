@@ -8,12 +8,19 @@
   .bg-primary {
     background-color: #FB6F92;
   }
+  .bg-accent {
+    background-color: #FFC2D1;
+  }
   .hover\:bg-primaryHover:hover {
     background-color: #ff2e63;
   }
 
   .hover\:text-primary:hover{
     color: #FB6F92;
+  }
+  
+  .hover\:border-primary:hover{
+    border-color: #FB6F92;
   }
 
   .text-dark {
@@ -25,10 +32,18 @@
   .border-primary {
     border-color: #FB6F92;
   }
+  .border-gray{
+    border-color: lightgray;
+  }
   .text-heading{
     color: #1f1f1f
   }
   .hover\:bg-accent:hover {
     background-color: #FFC2D1;
   }
+
+  .ring-primary {
+    --tw-ring-color: #FB6F92;
+  }
+
 }

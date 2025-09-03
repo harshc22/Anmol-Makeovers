@@ -1,15 +1,21 @@
 import Image from 'next/image'
-
 export default function Home() {
   return (
     <section className="bg-background text-dark px-4 sm:px-8 py-8 sm:py-10">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-12 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-12 items-center pt-20">
         <div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-semibold mb-6 leading-tight">
             Enhancing Your Natural Beauty
           </h1>
           <p className="text-base sm:text-lg md:text-xl mb-6 leading-relaxed">
-            I&apos;m Anmol, a certified makeup and hair artist based in the Greater Toronto Area, specializing in bridal, non-bridal, and editorial looks crafted for any occasion.
+            I&apos;m Anmol, a certified makeup and hair artist based in the Greater Toronto Area, specializing in bridal, non-bridal, and editorial looks crafted for any occasion.{' '}
+            <a
+              href="/about"
+              className="text-base sm:text-lg md:text-xl mb-6 leading-relaxed border-b border-transparent hover:border-primary hover-border-1 hover:text-primary transition"
+            >
+              Read More
+            </a>
+
           </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <a
