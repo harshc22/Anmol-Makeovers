@@ -18,22 +18,31 @@ export default function RequestQuote() {
   const [step, setStep] = useState<Step>(Step.SelectType);
   const [selected, setSelected] = useState<MakeupType | null>(null);
   const [eventCount, setEventCount] = useState(1);
-  const [events, setEvents] = useState<EventData[]>([
-    {
-      eventType: "",
-      date: "",
-      time: "",
-      location: "",
-      people: "",
-      services: [],
-    },
-  ]);
+  const makeEvent = (): EventData => ({
+    id:
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random()}`, // fallback
+    eventType: "",
+    date: "",
+    time: "",
+    location: "",
+    people: "",
+    services: [],
+  });
+
+  const [events, setEvents] = useState<EventData[]>([makeEvent()]);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     email: "",
     phone: "",
     address: "",
     notes: "",
   });
+
+  const initEvents = (count: number) => {
+    setEvents(Array.from({ length: count }, makeEvent));
+    setStep(Step.NonBridalEvents);
+  };
 
   const today = new Date().toISOString().split("T")[0];
   const addressInputRef = useRef<HTMLInputElement | null>(null);
@@ -51,19 +60,6 @@ export default function RequestQuote() {
     setStep(Step.NonBridalCount);
   };
 
-  const initEvents = () => {
-    const count = Math.min(Math.max(eventCount, 1), 5);
-    const arr: EventData[] = Array.from({ length: count }, () => ({
-      eventType: "",
-      date: "",
-      time: "",
-      location: "",
-      people: "",
-      services: [],
-    }));
-    setEvents(arr);
-    setStep(Step.NonBridalEvents);
-  };
 
   const goNextFromEvents = () => {
     if (!validateEventsComplete(events)) {
@@ -111,7 +107,7 @@ export default function RequestQuote() {
             eventCount={eventCount}
             setEventCount={setEventCount}
             onBack={() => setStep(Step.SelectType)}
-            onNext={initEvents}
+            onNext={() => initEvents(eventCount)}
           />
         )}
 

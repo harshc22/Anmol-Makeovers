@@ -1,6 +1,7 @@
 export type MakeupType = "Bridal" | "Non-Bridal";
 
 export interface EventData {
+  id: string; 
   eventType: string;
   date: string;
   time: string;
@@ -22,3 +23,9 @@ export enum Step {
   NonBridalEvents = 3,
   Contact = 4,
 }
+export type NonServiceField =
+  | "eventType"
+  | "date"
+  | "time"
+  | "location"
+  | "people";

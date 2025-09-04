@@ -1,21 +1,17 @@
 "use client";
+import React, { memo } from "react";
 import type { EventData } from "../types";
+import { NonServiceField } from "../types";
 
 interface Props {
   index: number;
   event: EventData;
   today: string;
-  onChange: (index: number, field: keyof EventData, value: string) => void;
+  onChange: (index: number, field: NonServiceField, value: string) => void;
   onToggleService: (index: number, service: string) => void;
 }
 
-export default function EventCard({
-  index,
-  event,
-  today,
-  onChange,
-  onToggleService,
-}: Props) {
+function EventCard({ index, event, today, onChange, onToggleService }: Props) {
   const services = ["Makeup", "Hair"] as const;
 
   return (
@@ -85,7 +81,7 @@ export default function EventCard({
                 className={`flex items-center justify-center rounded-md border text-lg font-medium py-3 cursor-pointer transition-all duration-200 ${
                   selected
                     ? "bg-accent text-dark border-primary shadow-md"
-                    : "bg-background text-dark border-gray hover:bg-accent"
+                    : "bg-background text-dark border-gray hover:bg-accent/70"
                 }`}
               >
                 <input
@@ -104,3 +100,5 @@ export default function EventCard({
     </div>
   );
 }
+
+export default memo(EventCard);

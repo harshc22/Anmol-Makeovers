@@ -1,10 +1,13 @@
 "use client";
+import React, { useCallback } from "react";
 import type { EventData } from "../types";
 import EventCard from "./EventCard";
+import { NonServiceField } from "../types";
 
 interface Props {
   events: EventData[];
-  setEvents: (events: EventData[]) => void;
+  // important: make this a real React state setter
+  setEvents: React.Dispatch<React.SetStateAction<EventData[]>>;
   today: string;
   onBack: () => void;
   onNext: () => void;
@@ -17,34 +20,44 @@ export default function StepNonBridalEvents({
   onBack,
   onNext,
 }: Props) {
-  const handleEventChange = (
-    index: number,
-    field: keyof EventData,
-    value: string
-  ) => {
-    const updated = [...events];
-    updated[index][field] = value as any;
-    setEvents(updated);
-  };
+  const handleEventChange = useCallback(
+    (index: number, field: NonServiceField, value: string) => {
+      setEvents((prev) => {
+        const next = [...prev];
+        next[index] = { ...next[index], [field]: value };
+        return next;
+      });
+    },
+    [setEvents]
+  );
 
-  const handleServiceToggle = (index: number, service: string) => {
-    const updated = [...events];
-    const svc = updated[index].services;
-    updated[index].services = svc.includes(service)
-      ? svc.filter((s) => s !== service)
-      : [...svc, service];
-    setEvents(updated);
-  };
+  const handleServiceToggle = useCallback(
+    (index: number, service: string) => {
+      setEvents((prev) => {
+        const next = [...prev];
+        const svcs = next[index].services;
+        next[index] = {
+          ...next[index],
+          services: svcs.includes(service)
+            ? svcs.filter((s) => s !== service)
+            : [...svcs, service],
+        };
+        return next;
+      });
+    },
+    [setEvents]
+  );
 
   return (
     <>
       <h2 className="text-4xl font-serif text-heading mb-4 text-center">
         Tell us about each event
       </h2>
+
       <div className="space-y-8">
         {events.map((ev, idx) => (
           <EventCard
-            key={idx}
+            key={ev.id}
             index={idx}
             event={ev}
             today={today}
@@ -56,12 +69,14 @@ export default function StepNonBridalEvents({
 
       <div className="mt-6 flex justify-between gap-4">
         <button
+          type="button"
           onClick={onBack}
           className="w-1/2 py-3 text-lg rounded-md border border-primary text-primary hover:bg-accent transition"
         >
           Back
         </button>
         <button
+          type="button"
           onClick={onNext}
           className="w-1/2 py-3 text-lg rounded-md transition shadow bg-primary hover:bg-primaryHover text-light"
         >
