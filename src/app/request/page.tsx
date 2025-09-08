@@ -14,6 +14,9 @@ import { useGoogleAddressAutocomplete } from "./hooks/useGoogleAddressAutocomple
 import { validateEventsComplete } from "./utils/validation";
 import { toast } from "sonner";
 
+const toServiceCode = (s: string) =>
+  s.trim().toLowerCase() as "makeup" | "hair" | "combo";
+
 export default function RequestQuote() {
   const [step, setStep] = useState<Step>(Step.SelectType);
   const [selected, setSelected] = useState<MakeupType | null>(null);
@@ -60,7 +63,6 @@ export default function RequestQuote() {
     setStep(Step.NonBridalCount);
   };
 
-
   const goNextFromEvents = () => {
     if (!validateEventsComplete(events)) {
       toast.error("Please fill all fields for each event before continuing.");
@@ -70,21 +72,46 @@ export default function RequestQuote() {
   };
 
   const submitForm = async () => {
-    const payload = { type: selected, events, contactInfo };
+    if (!selected) return;
+    const payload = {
+      serviceType: selected, // "Bridal" | "Non-Bridal"
+      events: events.map((e) => ({
+        eventType: e.eventType.trim(),
+        date: e.date,
+        time: e.time,
+        location: (e.location || contactInfo.address).trim(),
+        people: Number(e.people),
+        services: e.services.map(toServiceCode),
+      })),
+      contact: {
+        email: contactInfo.email.trim(),
+        phone: contactInfo.phone.replace(/\D/g, ""), // digits only
+        address: contactInfo.address.trim(),
+        notes: contactInfo.notes?.trim() || undefined,
+      },
+    };
+
     try {
-      const res = await fetch("/api/quote", {
+      const res = await fetch("/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (res.ok) {
-        toast.success(
-          "Your request has been sent! You will receive a confirmation shortly."
-        );
-        // optional: reset or redirect
-      } else {
-        toast.error("Something went wrong. Please try again.");
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        const msg =
+          (data?.details && Array.isArray(data.details)
+            ? `Invalid: ${data.details
+                .map((d: any) => d.path?.join(".") + ": " + d.message)
+                .join("; ")}`
+            : data?.error) || "Something went wrong. Please try again.";
+        toast.error(msg);
+        return;
       }
+
+      toast.success(`Request sent! Total: ${data.total_formatted}`);
     } catch (err) {
       console.error(err);
       toast.error("Server error. Please try again later.");
