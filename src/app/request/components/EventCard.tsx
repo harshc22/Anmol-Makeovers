@@ -20,7 +20,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
 
       <input
         type="text"
-        placeholder="Event Type (e.g. Party, Photoshoot)"
+        placeholder="Event Type (e.g. Party)"
         className="w-full px-4 py-3 border border-gray rounded-md"
         value={event.eventType}
         onChange={(e) => onChange(index, "eventType", e.target.value)}
@@ -53,7 +53,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
       <select
         value={event.people}
         onChange={(e) => onChange(index, "people", e.target.value)}
-        className="w-full px-4 py-4 rounded-md border border-gray bg-background text-dark text-base focus:outline-none focus:border-primary transition"
+        className="w-full px-4 py-3 rounded-md border border-gray bg-background text-dark text-base focus:outline-none focus:border-primary transition"
       >
         <option value="" disabled>
           Select number of people
