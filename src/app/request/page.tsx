@@ -13,9 +13,43 @@ import StepContact from "./components/StepContact";
 import { useGoogleAddressAutocomplete } from "./hooks/useGoogleAddressAutocomplete";
 import { validateEventsComplete } from "./utils/validation";
 import { toast } from "sonner";
+import type { ZodIssue } from "zod";
 
 const toServiceCode = (s: string) =>
   s.trim().toLowerCase() as "makeup" | "hair" | "combo";
+
+type ApiResponse =
+  | {
+      ok: true;
+      total_cents: number;
+      total_formatted: string;
+      breakdown: unknown;
+    }
+  | {
+      error: string;
+      details?: ZodIssue[];
+    };
+
+function isZodIssueArray(x: unknown): x is ZodIssue[] {
+  return (
+    Array.isArray(x) &&
+    x.every(
+      (i) =>
+        i &&
+        typeof i === "object" &&
+        "message" in (i as Record<string, unknown>)
+    )
+  );
+}
+
+function formatIssues(issues: ZodIssue[]): string {
+  return issues
+    .map((d) => {
+      const path = Array.isArray(d.path) ? d.path.join(".") : "";
+      return `${path ? `${path}: ` : ""}${d.message}`;
+    })
+    .join("; ");
+}
 
 export default function RequestQuote() {
   const [step, setStep] = useState<Step>(Step.SelectType);
@@ -92,27 +126,33 @@ export default function RequestQuote() {
     };
 
     try {
+      // If your API route lives at /api/quote, change this to "/api/quote"
       const res = await fetch("/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json().catch(() => null);
+      const data = (await res.json().catch(() => null)) as ApiResponse | null;
 
       if (!res.ok) {
         const msg =
-          (data?.details && Array.isArray(data.details)
-            ? `Invalid: ${data.details
-                .map((d: any) => d.path?.join(".") + ": " + d.message)
-                .join("; ")}`
-            : data?.error) || "Something went wrong. Please try again.";
+          data && "details" in data && isZodIssueArray(data.details)
+            ? `Invalid: ${formatIssues(data.details)}`
+            : data && "error" in data
+            ? data.error
+            : "Something went wrong. Please try again.";
         toast.error(msg);
         return;
       }
 
-      toast.success(`Request sent! Total: ${data.total_formatted}`);
+      if (data && "ok" in data && data.ok) {
+        toast.success(`Request sent! Total: ${data.total_formatted}`);
+      } else {
+        toast.success("Request sent!");
+      }
     } catch (err) {
+      /* eslint-disable-next-line no-console */
       console.error(err);
       toast.error("Server error. Please try again later.");
     }
