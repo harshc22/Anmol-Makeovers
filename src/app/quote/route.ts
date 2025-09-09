@@ -1,13 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
-import { Resend } from "resend";
+import nodemailer, { type Transporter } from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 // ---------- ENV ----------
-const requiredEnv = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "ADMIN_EMAIL", "RESEND_API_KEY"] as const;
+const requiredEnv = [
+  "SUPABASE_URL",
+  "SUPABASE_SERVICE_ROLE_KEY",
+  "ADMIN_EMAIL",
+  "GMAIL_USER",
+  "GMAIL_APP_PASSWORD",
+] as const;
 function ensureEnv() {
   const missing = requiredEnv.filter((k) => !process.env[k]);
   if (missing.length) throw new Error("Missing env: " + missing.join(", "));
+}
+
+// Nodemailer (Gmail + app password)
+let transporter: Transporter<SMTPTransport.SentMessageInfo> | null = null;
+function getTransporter(): Transporter<SMTPTransport.SentMessageInfo> {
+  if (transporter) return transporter;
+  transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // SSL
+    auth: {
+      user: process.env.GMAIL_USER!,
+      pass: process.env.GMAIL_APP_PASSWORD!,
+    },
+  });
+  return transporter;
 }
 
 // ---------- SCHEMA (matches your normalized frontend payload) ----------
@@ -57,7 +80,6 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!,
       { auth: { persistSession: false, autoRefreshToken: false } }
     );
-    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // 1) Parse & validate body
     const parsed = QuoteSchema.parse(await req.json());
@@ -106,8 +128,8 @@ export async function POST(req: NextRequest) {
 
     const total_cents = breakdown.reduce((s, e) => s + e.event_subtotal_cents, 0);
 
-    // 4) Build and send ONE email to Anmol
-    const subject = `New Quote — ${parsed.serviceType} — ${formatMoney(total_cents)}`;
+    // 4) Build and send ONE email to Anmol (via Gmail)
+    const subject = `Test Email - New Quote — ${parsed.serviceType} — ${formatMoney(total_cents)}`;
     const text =
       `Client\n` +
       `  • Email: ${parsed.contact.email}\n` +
@@ -127,13 +149,13 @@ export async function POST(req: NextRequest) {
     let providerId: string | null = null;
     let status: "sent" | "failed" = "failed";
     try {
-      const sent = await resend.emails.send({
-        from: "Quotes <quotes@your-domain.com>",
+      const info = await getTransporter().sendMail({
+        from: process.env.GMAIL_FROM ?? process.env.GMAIL_USER!,
         to: process.env.ADMIN_EMAIL!,
         subject,
         text,
       });
-      providerId = (sent as any)?.id ?? null;
+      providerId = typeof info.messageId === "string" ? info.messageId : null;
       status = providerId ? "sent" : "failed";
     } catch {
       status = "failed"; // continue to log as failed
@@ -143,15 +165,15 @@ export async function POST(req: NextRequest) {
     const { error: logErr } = await supabase.from("email_log").insert({
       to_email: process.env.ADMIN_EMAIL!,
       subject,
-      total_cents,                 // integer (matches your schema)
+      total_cents, // integer (matches your schema)
       payload_json: {
         request: parsed,
         breakdown,
         total_cents,
       },
-      provider: "resend",
-      provider_id: providerId,     // nullable ok
-      status,                      // 'sent' | 'failed'
+      provider: "gmail",
+      provider_id: providerId, // nullable ok
+      status, // 'sent' | 'failed'
     });
 
     if (logErr) {
