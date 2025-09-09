@@ -1,12 +1,14 @@
 import { z } from "zod";
+
 export const EventSchema = z.object({
   eventType: z.string().min(1),
   date: z.string().min(1),
   time: z.string().min(1),
-  location: z.string().min(1),
+  location: z.string().optional().default(""),
   people: z.coerce.number().int().min(1).max(50),
-  services: z.array(z.enum(["makeup", "hair", "combo"])).min(1),
+  services: z.array(z.enum(["makeup", "hair", "combo"])),
 });
+
 export const QuoteSchema = z.object({
   serviceType: z.enum(["Bridal", "Non-Bridal"]),
   events: z.array(EventSchema).min(1).max(5),
@@ -17,5 +19,3 @@ export const QuoteSchema = z.object({
     notes: z.string().optional(),
   }),
 });
-export type QuoteInput = z.infer<typeof QuoteSchema>;
-export type EventInput = z.infer<typeof EventSchema>;
