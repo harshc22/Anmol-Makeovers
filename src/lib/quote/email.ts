@@ -25,8 +25,8 @@ export function buildEmail(
   total_cents: number
 ): { subject: string; text: string; from: string; to: string } {
   const subject = `New Quote — ${parsed.serviceType} — ${money(total_cents)}`;
-  const fromName = process.env.GMAIL_FROM_NAME?.trim();
-  const fromUser = process.env.GMAIL_FROM ?? process.env.GMAIL_USER ?? "";
+  const fromName = process.env.GMAIL_NAME?.trim();
+  const fromUser = process.env.GMAIL_USER ?? "";
   const from = fromName ? `${fromName} <${fromUser}>` : (fromUser as string);
 
   const header = [
