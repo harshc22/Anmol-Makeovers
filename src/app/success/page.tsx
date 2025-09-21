@@ -35,7 +35,7 @@ export default function SuccessPage() {
         
         <p className="text-lg text-dark mb-8 leading-relaxed">
           Thank you for your interest in our {serviceType.toLowerCase()} services. 
-          We've received your quote request and will get back to you within 24 hours.
+          We&apos;ve received your quote request and will get back to you within 24 hours.
         </p>
 
         {/* What's Next Section */}
@@ -48,7 +48,7 @@ export default function SuccessPage() {
               </div>
               <div>
                 <p className="font-medium text-heading">Email Confirmation</p>
-                <p className="text-sm text-dark">You'll receive a confirmation email shortly</p>
+                <p className="text-sm text-dark">You&apos;ll receive a confirmation email shortly</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -57,7 +57,7 @@ export default function SuccessPage() {
               </div>
               <div>
                 <p className="font-medium text-heading">Review & Quote</p>
-                <p className="text-sm text-dark">We'll review your requirements and prepare a detailed quote</p>
+                <p className="text-sm text-dark">We&apos;ll review your requirements and prepare a detailed quote</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
@@ -66,7 +66,7 @@ export default function SuccessPage() {
               </div>
               <div>
                 <p className="font-medium text-heading">Personal Contact</p>
-                <p className="text-sm text-dark">We'll reach out to discuss your event and finalize details</p>
+                <p className="text-sm text-dark">We&apos;ll reach out to discuss your event and finalize details</p>
               </div>
             </div>
           </div>
