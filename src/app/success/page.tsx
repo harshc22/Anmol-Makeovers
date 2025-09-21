@@ -2,8 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle, Mail, Phone, Clock } from "lucide-react";
+import { Suspense } from "react";
 
-export default function SuccessPage() {
+function SuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -98,5 +99,28 @@ export default function SuccessPage() {
 
       </div>
     </section>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <section className="bg-background pt-25 min-h-screen flex items-center justify-center px-4 py-16">
+        <div className="bg-white rounded-3xl shadow-lg max-w-2xl w-full p-8 md:p-12 text-center border border-gray">
+          <div className="animate-pulse">
+            <div className="bg-accent rounded-full p-6 w-16 h-16 mx-auto mb-8"></div>
+            <div className="h-8 bg-gray-200 rounded mb-4"></div>
+            <div className="h-4 bg-gray-200 rounded mb-8"></div>
+            <div className="h-32 bg-gray-200 rounded mb-8"></div>
+            <div className="flex gap-4 justify-center">
+              <div className="h-12 bg-gray-200 rounded w-48"></div>
+              <div className="h-12 bg-gray-200 rounded w-48"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 }
