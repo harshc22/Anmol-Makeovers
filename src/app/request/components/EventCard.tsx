@@ -21,7 +21,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
       <input
         type="text"
         placeholder="Event Type (e.g. Party)"
-        className="w-full px-4 py-3 border border-gray rounded-md"
+        className="w-full text-dark transition-colors"
         value={event.eventType}
         onChange={(e) => onChange(index, "eventType", e.target.value)}
       />
@@ -32,7 +32,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
       <input
         type="date"
         min={today}
-        className="w-full px-4 py-3 border border-gray rounded-md"
+        className="w-full text-dark transition-colors"
         value={event.date}
         onChange={(e) => onChange(index, "date", e.target.value)}
       />
@@ -42,7 +42,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
       </label>
       <input
         type="time"
-        className="w-full px-4 py-3 border border-gray rounded-md"
+        className="w-full text-dark transition-colors"
         value={event.time}
         onChange={(e) => onChange(index, "time", e.target.value)}
       />
@@ -53,7 +53,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
       <select
         value={event.people}
         onChange={(e) => onChange(index, "people", e.target.value)}
-        className="w-full px-4 py-3 rounded-md border border-gray bg-background text-dark text-base focus:outline-none focus:border-primary transition"
+        className="w-full text-dark transition-colors"
       >
         <option value="" disabled>
           Select number of people

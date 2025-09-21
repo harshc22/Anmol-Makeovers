@@ -26,7 +26,7 @@ export default function StepNonBridalCount({
         <select
           value={eventCount}
           onChange={(e) => setEventCount(Number(e.target.value))}
-          className="w-full px-4 py-4 rounded-md border border-gray bg-background text-dark text-base focus:outline-none focus:ring-2 ring-primary focus:border-primary transition"
+          className="w-full text-dark transition-colors"
         >
           {([1, 2, 3, 4, 5] as const).map((num) => (
             <option key={num} value={num}>
@@ -38,13 +38,13 @@ export default function StepNonBridalCount({
         <div className="mt-6 flex justify-between gap-4">
           <button
             onClick={onBack}
-            className="w-1/2 py-3 text-lg rounded-md border border-primary text-primary hover:bg-accent transition"
+            className="w-1/2 text-lg border border-primary text-primary hover:bg-accent"
           >
             Back
           </button>
           <button
             onClick={onNext}
-            className="w-1/2 py-3 text-lg rounded-md transition shadow bg-primary hover:bg-primaryHover text-light"
+            className="w-1/2 text-lg shadow bg-primary hover:bg-primaryHover text-light"
           >
             Next
           </button>

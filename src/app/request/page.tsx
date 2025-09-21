@@ -1,5 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import ReCAPTCHA from "react-google-recaptcha";
 import {
   Step,
   type MakeupType,
@@ -13,48 +15,25 @@ import StepContact from "./components/StepContact";
 import { useGoogleAddressAutocomplete } from "./hooks/useGoogleAddressAutocomplete";
 import { validateEventsComplete } from "./utils/validation";
 import { toast } from "sonner";
-import type { ZodIssue } from "zod";
-
 const toServiceCode = (s: string) =>
   s.trim().toLowerCase() as "makeup" | "hair" | "combo";
 
 type ApiResponse =
   | {
       ok: true;
-      total_cents: number;
-      total_formatted: string;
-      breakdown: unknown;
     }
   | {
       error: string;
-      details?: ZodIssue[];
     };
 
-function isZodIssueArray(x: unknown): x is ZodIssue[] {
-  return (
-    Array.isArray(x) &&
-    x.every(
-      (i) =>
-        i &&
-        typeof i === "object" &&
-        "message" in (i as Record<string, unknown>)
-    )
-  );
-}
-
-function formatIssues(issues: ZodIssue[]): string {
-  return issues
-    .map((d) => {
-      const path = Array.isArray(d.path) ? d.path.join(".") : "";
-      return `${path ? `${path}: ` : ""}${d.message}`;
-    })
-    .join("; ");
-}
-
 export default function RequestQuote() {
+  const router = useRouter();
   const [step, setStep] = useState<Step>(Step.SelectType);
   const [selected, setSelected] = useState<MakeupType | null>(null);
   const [eventCount, setEventCount] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const makeEvent = (): EventData => ({
     id:
       typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -106,7 +85,16 @@ export default function RequestQuote() {
   };
 
   const submitForm = async () => {
-    if (!selected) return;
+    if (!selected || isSubmitting) return;
+    
+    // Check reCAPTCHA
+    if (!recaptchaToken) {
+      toast.error("Please complete the reCAPTCHA verification.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    
     const payload = {
       serviceType: selected, // "Bridal" | "Non-Bridal"
       events: events.map((e) => ({
@@ -123,10 +111,10 @@ export default function RequestQuote() {
         address: contactInfo.address.trim(),
         notes: contactInfo.notes?.trim() || undefined,
       },
+      recaptchaToken,
     };
 
     try {
-      // If your API route lives at /api/quote, change this to "/api/quote"
       const res = await fetch("/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -136,18 +124,18 @@ export default function RequestQuote() {
       const data = (await res.json().catch(() => null)) as ApiResponse | null;
 
       if (!res.ok) {
-        const msg =
-          data && "details" in data && isZodIssueArray(data.details)
-            ? `Invalid: ${formatIssues(data.details)}`
-            : data && "error" in data
-            ? data.error
-            : "Something went wrong. Please try again.";
+        // Show user-friendly error messages instead of exposing internal details
+        const msg = data && "error" in data
+          ? data.error // Server now returns user-friendly messages
+          : "Something went wrong. Please try again.";
         toast.error(msg);
         return;
       }
 
       if (data && "ok" in data && data.ok) {
-        toast.success(`Request sent! Total: ${data.total_formatted}`);
+        // Navigate to success page with service type parameter
+        const serviceTypeParam = selected === "Bridal" ? "bridal" : "non-bridal";
+        router.push(`/success?type=${serviceTypeParam}`);
       } else {
         toast.success("Request sent!");
       }
@@ -155,6 +143,11 @@ export default function RequestQuote() {
       /* eslint-disable-next-line no-console */
       console.error(err);
       toast.error("Server error. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+      // Reset reCAPTCHA
+      setRecaptchaToken(null);
+      recaptchaRef.current?.reset();
     }
   };
 
@@ -195,6 +188,10 @@ export default function RequestQuote() {
             onBack={() => setStep(Step.NonBridalEvents)}
             onSubmit={(ok) => ok && submitForm()}
             addressInputRef={addressInputRef}
+            isSubmitting={isSubmitting}
+            recaptchaToken={recaptchaToken}
+            setRecaptchaToken={setRecaptchaToken}
+            recaptchaRef={recaptchaRef as React.RefObject<ReCAPTCHA>}
           />
         )}
 

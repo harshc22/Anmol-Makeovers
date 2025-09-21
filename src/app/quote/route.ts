@@ -18,6 +18,27 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as unknown;
     const parsed = QuoteSchema.parse(body) as QuoteRequest;
 
+    // Validate reCAPTCHA token
+    if (parsed.recaptchaToken) {
+      const recaptchaResponse = await fetch(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${parsed.recaptchaToken}`,
+        { method: "POST" }
+      );
+      const recaptchaData = await recaptchaResponse.json();
+      
+      if (!recaptchaData.success) {
+        return NextResponse.json(
+          { error: "reCAPTCHA verification failed. Please try again." },
+          { status: 400 }
+        );
+      }
+    } else {
+      return NextResponse.json(
+        { error: "reCAPTCHA verification is required." },
+        { status: 400 }
+      );
+    }
+
     const catalog = await loadCatalog(supabase);
     const { breakdown, total_cents } = computeBreakdown(parsed, catalog);
 
@@ -50,12 +71,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      total_cents,
-      total_formatted: money(total_cents),
-      breakdown,
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Server error";
+    // Log the full error for debugging but don't expose it to the client
+    console.error("Quote request error:", err);
+    
+    // Return a generic error message to the client
+    const message = err instanceof Error && err.message.includes("validation") 
+      ? "Please check your input and try again"
+      : "Something went wrong. Please try again later.";
+    
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -18,4 +18,5 @@ export const QuoteSchema = z.object({
     address: z.string().min(3),
     notes: z.string().optional(),
   }),
+  recaptchaToken: z.string().min(1),
 });

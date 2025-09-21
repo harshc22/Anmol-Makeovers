@@ -33,17 +33,47 @@ export async function loadCatalog(supabase: SupabaseClient): Promise<Catalog> {
   return catalog;
 }
 
+/**
+ * Maps selected services to catalog code(s), automatically preferring the combo
+ * price per person when both makeup & hair are selected and a combo is present.
+ * Falls back to separate items if combo is missing or (optionally) more expensive.
+ */
 function codesFor(
   serviceType: "Bridal" | "Non-Bridal",
-  services: Service[]
+  services: Service[],
+  catalog: Catalog
 ): string[] {
   const prefix = serviceType === "Bridal" ? "br" : "nb";
-  const map: Record<Service, string> = {
-    makeup: `${prefix}_makeup`,
-    hair: `${prefix}_hair`,
-    combo: `${prefix}_combo`,
-  };
-  return services.map((s) => map[s]);
+
+  const hasMakeup = services.includes("makeup");
+  const hasHair = services.includes("hair");
+
+  const makeupCode = `${prefix}_makeup`;
+  const hairCode = `${prefix}_hair`;
+  const comboCode = `${prefix}_combo`;
+
+  // If both are selected, try to use combo
+  if (hasMakeup && hasHair) {
+    // Prefer combo if it exists and is not more expensive than separate
+    if (catalog[comboCode]) {
+      const combo = catalog[comboCode].price_cents;
+      const separate =
+        (catalog[makeupCode]?.price_cents ?? Number.POSITIVE_INFINITY) +
+        (catalog[hairCode]?.price_cents ?? Number.POSITIVE_INFINITY);
+
+      if (combo <= separate) {
+        return [comboCode];
+      }
+    }
+    // Fallback: charge both separately
+    return [makeupCode, hairCode];
+  }
+
+  if (hasMakeup) return [makeupCode];
+  if (hasHair) return [hairCode];
+
+  // No services selected for this event
+  return [];
 }
 
 export function computeBreakdown(
@@ -51,14 +81,19 @@ export function computeBreakdown(
   catalog: Catalog
 ): { breakdown: EventBreakdown[]; total_cents: number } {
   const breakdown = parsed.events.map<EventBreakdown>((e) => {
-    const codes = codesFor(parsed.serviceType, e.services);
+    const codes = codesFor(parsed.serviceType, e.services, catalog);
     let eventSubtotal = 0;
     const lines: EventBreakdown["lines"] = [];
 
     for (const code of codes) {
       const item = catalog[code];
       if (!item) continue;
-      const amount = item.price_cents * e.people; // per-person pricing
+
+      // Ensure people is numeric (API layer should coerce, but guard anyway)
+      const peopleCount =
+        typeof e.people === "string" ? Number(e.people) : e.people || 0;
+
+      const amount = item.price_cents * peopleCount; // per-person pricing
       eventSubtotal += amount;
       lines.push({ label: item.name, amount_cents: amount });
     }
@@ -68,7 +103,7 @@ export function computeBreakdown(
       date: e.date,
       time: e.time,
       location: e.location || parsed.contact.address,
-      people: e.people,
+      people: typeof e.people === "string" ? Number(e.people) : e.people,
       services: e.services,
       lines,
       event_subtotal_cents: eventSubtotal,

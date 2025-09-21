@@ -26,7 +26,7 @@ export default function StepSelectType({
           <button
             key={type}
             onClick={() => setSelected(type)}
-            className={`w-full py-4 rounded-md border text-lg font-medium transition ${
+            className={`w-full py-4 border text-lg font-medium ${
               selected === type
                 ? "bg-accent text-dark border-primary"
                 : "bg-background text-dark border-gray hover:bg-accent"
@@ -42,10 +42,10 @@ export default function StepSelectType({
         <button
           onClick={onNext}
           disabled={!selected}
-          className={`w-full py-3 text-lg rounded-md transition shadow ${
+          className={`w-full text-lg shadow ${
             selected
               ? "bg-primary hover:bg-primaryHover text-light"
-              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-gray-200 text-gray-400"
           }`}
         >
           Next

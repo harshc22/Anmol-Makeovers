@@ -4,6 +4,7 @@ const REQUIRED_ENV = [
   "ADMIN_EMAIL",
   "GMAIL_USER",
   "GMAIL_APP_PASSWORD",
+  "RECAPTCHA_SECRET_KEY",
 ] as const;
 
 export function assertEnv(): void {
