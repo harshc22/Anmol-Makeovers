@@ -73,7 +73,7 @@ export default function StepContact({
       />
 
       {/* reCAPTCHA */}
-      <div className="flex justify-center mt-6">
+      <div className="flex justify-center">
         <ReCAPTCHA
           ref={recaptchaRef}
           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
