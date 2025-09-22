@@ -6,14 +6,16 @@ import {
   Step,
   type MakeupType,
   type EventData,
+  type BridalEventData,
   type ContactInfo,
 } from "./types";
 import StepSelectType from "./components/StepSelectType";
 import StepNonBridalCount from "./components/StepNonBridalCount";
 import StepNonBridalEvents from "./components/StepNonBridalEvents";
+import StepBridalEvents from "./components/StepBridalEvents";
 import StepContact from "./components/StepContact";
 import { useGoogleAddressAutocomplete } from "./hooks/useGoogleAddressAutocomplete";
-import { validateEventsComplete } from "./utils/validation";
+import { validateEventsComplete, validateBridalEventsComplete } from "./utils/validation";
 import { toast } from "sonner";
 const toServiceCode = (s: string) =>
   s.trim().toLowerCase() as "makeup" | "hair" | "combo";
@@ -48,6 +50,17 @@ export default function RequestQuote() {
   });
 
   const [events, setEvents] = useState<EventData[]>([makeEvent()]);
+  const makeBridalEvent = (): BridalEventData => ({
+    id:
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random()}`, // fallback
+    eventType: "",
+    date: "",
+    time: "",
+    location: "",
+  });
+  const [bridalEvents, setBridalEvents] = useState<BridalEventData[]>([makeBridalEvent()]);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     email: "",
     phone: "",
@@ -58,6 +71,12 @@ export default function RequestQuote() {
   const initEvents = (count: number) => {
     setEvents(Array.from({ length: count }, makeEvent));
     setStep(Step.NonBridalEvents);
+  };
+
+  const initBridalEvents = () => {
+    // initialize with the currently selected eventCount
+    setBridalEvents(Array.from({ length: eventCount }, makeBridalEvent));
+    setStep(Step.BridalEvents);
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -73,11 +92,20 @@ export default function RequestQuote() {
   // navigation handlers
   const goNextFromType = () => {
     if (!selected) return;
+    // For both Bridal and Non-Bridal we first ask how many events
     setStep(Step.NonBridalCount);
   };
 
   const goNextFromEvents = () => {
     if (!validateEventsComplete(events)) {
+      toast.error("Please fill all fields for each event before continuing.");
+      return;
+    }
+    setStep(Step.Contact);
+  };
+
+  const goNextFromBridalEvents = () => {
+    if (!validateBridalEventsComplete(bridalEvents)) {
       toast.error("Please fill all fields for each event before continuing.");
       return;
     }
@@ -97,14 +125,23 @@ export default function RequestQuote() {
     
     const payload = {
       serviceType: selected, // "Bridal" | "Non-Bridal"
-      events: events.map((e) => ({
-        eventType: e.eventType.trim(),
-        date: e.date,
-        time: e.time,
-        location: (e.location || contactInfo.address).trim(),
-        people: Number(e.people),
-        services: e.services.map(toServiceCode),
-      })),
+      events: selected === "Bridal" 
+        ? bridalEvents.map((e) => ({
+            eventType: e.eventType.trim(),
+            date: e.date,
+            time: e.time,
+            location: (e.location || contactInfo.address).trim(),
+            people: 1,
+            services: ["makeup", "hair"], // Auto-include for bridal
+          }))
+        : events.map((e) => ({
+            eventType: e.eventType.trim(),
+            date: e.date,
+            time: e.time,
+            location: (e.location || contactInfo.address).trim(),
+            people: Number(e.people),
+            services: e.services.map(toServiceCode),
+          })),
       contact: {
         email: contactInfo.email.trim(),
         phone: contactInfo.phone.replace(/\D/g, ""), // digits only
@@ -162,12 +199,12 @@ export default function RequestQuote() {
           />
         )}
 
-        {step === Step.NonBridalCount && selected === "Non-Bridal" && (
+        {step === Step.NonBridalCount && (selected === "Non-Bridal" || selected === "Bridal") && (
           <StepNonBridalCount
             eventCount={eventCount}
             setEventCount={setEventCount}
             onBack={() => setStep(Step.SelectType)}
-            onNext={() => initEvents(eventCount)}
+            onNext={() => (selected === "Bridal" ? initBridalEvents() : initEvents(eventCount))}
           />
         )}
 
@@ -181,11 +218,25 @@ export default function RequestQuote() {
           />
         )}
 
+        {step === Step.BridalEvents && selected === "Bridal" && (
+          <StepBridalEvents
+            events={bridalEvents}
+            setEvents={setBridalEvents}
+            today={today}
+            onBack={() => setStep(Step.NonBridalCount)}
+            onNext={goNextFromBridalEvents}
+          />
+        )}
+
         {step === Step.Contact && (
           <StepContact
             contactInfo={contactInfo}
             setContactInfo={setContactInfo}
-            onBack={() => setStep(Step.NonBridalEvents)}
+            onBack={() => 
+              selected === "Bridal" 
+                ? setStep(Step.BridalEvents)
+                : setStep(Step.NonBridalEvents)
+            }
             onSubmit={(ok) => ok && submitForm()}
             addressInputRef={addressInputRef}
             isSubmitting={isSubmitting}
@@ -195,7 +246,6 @@ export default function RequestQuote() {
           />
         )}
 
-        {/* Bridal flow component can be added later with its own steps */}
       </div>
     </section>
   );

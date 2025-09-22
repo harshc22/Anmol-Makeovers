@@ -1,4 +1,4 @@
-import type { ContactInfo, EventData } from "../types";
+import type { ContactInfo, EventData, BridalEventData } from "../types";
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const phoneDigitsRegex = /^[0-9]{10,15}$/;
@@ -11,6 +11,15 @@ export function validateEventsComplete(events: EventData[]): boolean {
       ev.time.trim() &&
       ev.people &&
       ev.services.length > 0
+  );
+}
+
+export function validateBridalEventsComplete(events: BridalEventData[]): boolean {
+  return events.every(
+    (ev) =>
+      ev.eventType.trim() &&
+      ev.date.trim() &&
+      ev.time.trim()
   );
 }
 
