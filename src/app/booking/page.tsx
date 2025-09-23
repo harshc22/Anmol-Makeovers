@@ -21,14 +21,14 @@ export default function BookingHero() {
       {/* Right Column: Text Content */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center md:items-start px-4 mt-10 md:mt-0 space-y-6 text-center md:text-left">
         <h1 className="text-4xl md:text-5xl font-serif font-semibold text-heading">
-          Let’s Create Your Perfect Look
+          Let&apos;s Create Your Perfect Look
         </h1>
         <p className="text-lg max-w-md text-dark">
           From bridal elegance to editorial glam, every look is crafted with care, confidence, and intention.
         </p>
         <a
           href="/request"
-          className="inline-block bg-primary text-light text-lg px-8 py-4 rounded-md shadow-md hover:bg-primaryHover transition"
+          className="inline-block bg-primary text-light text-lg px-8 py-4 rounded-full shadow-md hover:bg-primaryHover transition"
         >
           Request a Quote
         </a>

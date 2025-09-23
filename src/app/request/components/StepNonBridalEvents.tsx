@@ -71,14 +71,14 @@ export default function StepNonBridalEvents({
         <button
           type="button"
           onClick={onBack}
-          className="w-1/2 py-3 text-lg rounded-md border border-primary text-primary hover:bg-accent transition"
+          className="w-1/2 py-3 text-lg rounded-full border border-primary text-primary hover:bg-accent transition"
         >
           Back
         </button>
         <button
           type="button"
           onClick={onNext}
-          className="w-1/2 py-3 text-lg rounded-md transition shadow bg-primary hover:bg-primaryHover text-light"
+          className="w-1/2 py-3 text-lg rounded-full transition shadow bg-primary hover:bg-primaryHover text-light"
         >
           Next
         </button>
