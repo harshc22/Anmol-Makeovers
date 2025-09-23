@@ -6,6 +6,16 @@ import { joinPrefix } from "@/lib/portfolio/storage"
 
 export interface Item { name: string; path: string; updated_at?: string }
 
+interface StorageEntryBase { name: string; updated_at?: string }
+interface StorageFile extends StorageEntryBase { metadata: Record<string, unknown> }
+interface StorageFolder extends StorageEntryBase { metadata?: undefined }
+type StorageEntry = StorageFile | StorageFolder
+
+function isStorageFile(e: StorageEntry): e is StorageFile {
+  // Supabase returns `metadata` for files; folders do not have it.
+  return typeof (e as StorageFile).metadata === "object" && (e as StorageFile).metadata !== null
+}
+
 export function usePortfolio(prefix: string = DEFAULT_PREFIX) {
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
@@ -18,13 +28,13 @@ export function usePortfolio(prefix: string = DEFAULT_PREFIX) {
     setLoading(true)
     setError(null)
 
-    const listPrefix = async (path: string) => {
+    const listPrefix = async (path: string): Promise<StorageEntry[]> => {
       const { data, error } = await supabase.storage.from(bucket).list(path, {
         limit: 1000,
         sortBy: { column: "updated_at", order: "desc" },
       })
       if (error) throw error
-      return data || []
+      return (data ?? []) as StorageEntry[]
     }
 
     try {
@@ -33,7 +43,7 @@ export function usePortfolio(prefix: string = DEFAULT_PREFIX) {
 
       const rootEntries = await listPrefix(pfx === "" ? "" : pfx)
       for (const e of rootEntries) {
-        if (e.name && (e.metadata || /\.[a-z0-9]+$/i.test(e.name))) {
+        if (e.name && (isStorageFile(e) || /\.[a-z0-9]+$/i.test(e.name))) {
           files.push({ name: e.name, path: pfx ? joinPrefix(pfx, e.name) : e.name, updated_at: e.updated_at })
         } else if (e.name) {
           folders.push(e.name)
@@ -47,10 +57,10 @@ export function usePortfolio(prefix: string = DEFAULT_PREFIX) {
             try {
               const sub = await listPrefix(`${folder}/`)
               return sub
-                .filter((f: any) => f.name)
-                .map((f: any) => ({ name: f.name, path: `${folder}/${f.name}`, updated_at: f.updated_at }))
+                .filter((f): f is StorageEntry => Boolean(f?.name))
+                .map((f) => ({ name: f.name, path: `${folder}/${f.name}`, updated_at: f.updated_at }))
             } catch {
-              return []
+              return [] as Item[]
             }
           })
         )
@@ -63,10 +73,10 @@ export function usePortfolio(prefix: string = DEFAULT_PREFIX) {
               const subPrefix = joinPrefix(pfx, `${folder}/`)
               const sub = await listPrefix(subPrefix)
               return sub
-                .filter((f: any) => f.name)
-                .map((f: any) => ({ name: f.name, path: joinPrefix(subPrefix, f.name), updated_at: f.updated_at }))
+                .filter((f): f is StorageEntry => Boolean(f?.name))
+                .map((f) => ({ name: f.name, path: joinPrefix(subPrefix, f.name), updated_at: f.updated_at }))
             } catch {
-              return []
+              return [] as Item[]
             }
           })
         )
@@ -80,9 +90,9 @@ export function usePortfolio(prefix: string = DEFAULT_PREFIX) {
       })
 
       setItems(files)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("list error", err)
-      setError(err?.message || "Failed to list images")
+      setError(err instanceof Error ? err.message : "Failed to list images")
       setItems([])
     } finally {
       setLoading(false)
