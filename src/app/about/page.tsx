@@ -26,7 +26,7 @@ export default function AboutPage() {
           </div>
 
           <p className="max-w-2xl font-serif text-2xl leading-[1.35] text-dark md:text-[28px]">
-            I believe makeup makes the abstract tangible — confidence,
+            I believe makeup turns the abstract into confidence,
             character, mood. My work is a conversation between artist and
             client, designed to last through long days, bright lights, and the
             memories that follow.
@@ -67,7 +67,7 @@ export default function AboutPage() {
           </div>
           <div className="md:col-span-9">
             <p className="font-serif text-2xl leading-[1.35] text-dark md:text-[28px]">
-              Beauty should feel like you — effortless, elegant, and
+              Beauty should feel like you: effortless, elegant, and
               comfortable. I listen first, then design a look that enhances your
               natural features with skin-forward techniques, photo-friendly
               finishes, and long wear in mind.

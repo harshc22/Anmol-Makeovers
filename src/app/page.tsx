@@ -20,7 +20,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <a
               href="/portfolio"
-              className="mx-auto flex w-full max-w-[400px] items-center justify-center rounded-full border-2 border-primary px-3 py-4 text-sm font-semibold tracking-wide text-heading transition hover:bg-accent"
+              className="mx-auto flex w-full max-w-[400px] items-center justify-center rounded-full border-2 border-primary px-3 py-4 font-semibold tracking-wide transition hover:bg-accent"
             >
               View Portfolio
             </a>
