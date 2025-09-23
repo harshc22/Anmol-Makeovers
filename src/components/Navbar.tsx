@@ -35,7 +35,7 @@ export default function Navbar() {
           <Link href="/about" className="hover:text-primary transition">About</Link>
           <Link
             href="/booking"
-            className="ml-4 bg-primary text-light px-5 py-2 rounded-md hover:bg-primaryHover transition"
+            className="ml-4 bg-primary text-light px-5 py-2 rounded-full hover:bg-primaryHover transition"
           >
             Book Now
           </Link>
@@ -51,7 +51,7 @@ export default function Navbar() {
             <Link href="/about" className="hover:text-primary transition">About</Link>
             <Link
               href="/booking"
-              className="bg-primary text-light text-center py-2 rounded-md hover:bg-primaryHover transition"
+              className="bg-primary text-light text-center py-2 rounded-full hover:bg-primaryHover transition"
             >
               Book Now
             </Link>

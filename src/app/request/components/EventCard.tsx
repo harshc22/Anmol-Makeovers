@@ -78,7 +78,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
               <label
                 key={service}
                 htmlFor={id}
-                className={`flex items-center justify-center rounded-md border text-lg font-medium py-3 cursor-pointer transition-all duration-200 ${
+                className={`flex items-center justify-center rounded-full border text-lg font-medium py-3 cursor-pointer transition-all duration-200 ${
                   selected
                     ? "bg-accent text-dark border-primary shadow-md"
                     : "bg-background text-dark border-gray hover:bg-accent/70"

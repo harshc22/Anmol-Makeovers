@@ -38,13 +38,13 @@ export default function StepNonBridalCount({
         <div className="mt-6 flex justify-between gap-4">
           <button
             onClick={onBack}
-            className="w-1/2 text-lg border border-primary text-primary hover:bg-accent"
+            className="w-1/2 text-lg border rounded-full border-primary text-primary hover:bg-accent"
           >
             Back
           </button>
           <button
             onClick={onNext}
-            className="w-1/2 text-lg shadow bg-primary hover:bg-primaryHover text-light"
+            className="w-1/2 text-lg shadow rounded-full bg-primary hover:bg-primaryHover text-light"
           >
             Next
           </button>

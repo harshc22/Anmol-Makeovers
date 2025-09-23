@@ -87,7 +87,7 @@ export default function StepContact({
         <button
           onClick={onBack}
           disabled={isSubmitting}
-          className="w-1/2 text-lg border border-primary text-primary hover:bg-accent"
+          className="w-1/2 text-lg border border-primary rounded-full text-primary hover:bg-accent"
         >
           Back
         </button>
@@ -102,7 +102,7 @@ export default function StepContact({
             onSubmit(true);
           }}
           disabled={isSubmitting || !recaptchaToken}
-          className="w-1/2 text-lg shadow bg-primary hover:bg-primaryHover text-light"
+          className="w-1/2 text-lg shadow bg-primary hover:bg-primaryHover text-light rounded-full"
         >
           <span className="flex items-center justify-center gap-2">
             {isSubmitting && (
