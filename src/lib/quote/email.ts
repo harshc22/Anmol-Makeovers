@@ -69,6 +69,7 @@ export function buildEmail(
     `Submitted  : ${submittedAt}`,
     "",
     "Client",
+    ` • Name    : ${parsed.contact.name}`,
     ` • Email   : ${parsed.contact.email}`,
     ` • Phone   : ${parsed.contact.phone}`,
     ` • Address : ${parsed.contact.address}`,

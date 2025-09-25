@@ -20,6 +20,7 @@ export interface BridalEventData {
 }
 
 export interface ContactInfo {
+  name: string;
   email: string;
   phone: string;
   address: string;

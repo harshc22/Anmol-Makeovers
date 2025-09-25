@@ -24,6 +24,7 @@ export function validateBridalEventsComplete(events: BridalEventData[]): boolean
 }
 
 export function validateContact(info: ContactInfo): string | null {
+  if (!info.name.trim()) return "Please enter your name.";
   if (!info.email || !emailRegex.test(info.email))
     return "Please enter a valid email address.";
   const digits = info.phone.replace(/\D/g, "");

@@ -47,7 +47,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400 rounded-3xl transform rotate-1 translate-x-2 translate-y-2 shadow-2xl"></div>
 
               {/* White frame */}
-              <div className="relative bg-primary rounded-3xl p-6 shadow-2xl transform -rotate-1">
+              <div className="relative bg-accent rounded-3xl p-6 shadow-2xl transform -rotate-1">
                 {/* Inner image container */}
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100">
                   <img
