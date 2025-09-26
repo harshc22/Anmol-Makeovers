@@ -1,4 +1,4 @@
-import type { ContactInfo, EventData, BridalEventData } from "../types";
+import type { ContactInfo, EventData, BridalEventData } from "@/types/request-types";
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const phoneDigitsRegex = /^[0-9]{10,15}$/;

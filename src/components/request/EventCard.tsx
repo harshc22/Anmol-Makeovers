@@ -1,7 +1,7 @@
 "use client";
 import React, { memo } from "react";
-import type { EventData } from "../types";
-import { NonServiceField } from "../types";
+import type { EventData } from "@/types/request-types";
+import { NonServiceField } from "@/types/request-types";
 
 interface Props {
   index: number;

@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AlbumCarousel } from "@/components/AlbumCarousel";
-import { Lightbox } from "@/components/Lightbox";
-import { MasonryGrid } from "@/components/MasonryGrid";
+import { AlbumCarousel } from "@/components/portfolio/AlbumCarousel";
+import { Lightbox } from "@/components/portfolio/Lightbox";
+import { MasonryGrid } from "@/components/portfolio/MasonryGrid";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { DEFAULT_PREFIX, ALBUM_PREFIXES } from "@/lib/portfolio/config";
 import { publicUrl } from "@/lib/portfolio/storage";

@@ -1,8 +1,8 @@
 "use client";
 import { toast } from "sonner";
 import ReCAPTCHA from "react-google-recaptcha";
-import type { ContactInfo } from "../types";
-import { validateContact } from "../utils/validation";
+import type { ContactInfo } from "@/types/request-types";
+import { validateContact } from "@/lib/request/validation";
 
 interface Props {
   contactInfo: ContactInfo;
