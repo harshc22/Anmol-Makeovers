@@ -62,6 +62,7 @@ export default function RequestQuote() {
   });
   const [bridalEvents, setBridalEvents] = useState<BridalEventData[]>([makeBridalEvent()]);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
+    name: "",
     email: "",
     phone: "",
     address: "",
@@ -143,6 +144,7 @@ export default function RequestQuote() {
             services: e.services.map(toServiceCode),
           })),
       contact: {
+        name: contactInfo.name.trim(),
         email: contactInfo.email.trim(),
         phone: contactInfo.phone.replace(/\D/g, ""), // digits only
         address: contactInfo.address.trim(),

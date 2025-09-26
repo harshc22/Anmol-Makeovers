@@ -40,6 +40,13 @@ export default function StepContact({
       </p>
 
       <div className="space-y-4">
+          <input
+          type="text"
+          placeholder="Name"
+          value={contactInfo.name}
+          onChange={(e) => handleChange("name", e.target.value)}
+          className="w-full text-dark transition-colors"
+        />
         <input
           type="email"
           placeholder="Email Address"

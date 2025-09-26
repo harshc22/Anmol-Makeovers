@@ -13,6 +13,7 @@ export const QuoteSchema = z.object({
   serviceType: z.enum(["Bridal", "Non-Bridal"]),
   events: z.array(EventSchema).min(1).max(5),
   contact: z.object({
+    name: z.string().min(1),
     email: z.string().email(),
     phone: z.string().min(7),
     address: z.string().min(3),
