@@ -31,6 +31,7 @@
     "sonner": "^2.0.7",
     "swiper": "^11.2.10",
     "use-places-autocomplete": "^4.0.1",
+    "yet-another-react-lightbox": "^3.25.0",
     "zod": "^4.0.16"
   },
   "devDependencies": {
