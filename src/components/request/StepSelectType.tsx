@@ -1,5 +1,5 @@
 "use client";
-import type { MakeupType } from "../types";
+import type { MakeupType } from "@/types/request-types";
 
 interface Props {
   selected: MakeupType | null;

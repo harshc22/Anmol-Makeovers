@@ -8,14 +8,14 @@ import {
   type EventData,
   type BridalEventData,
   type ContactInfo,
-} from "./types";
-import StepSelectType from "./components/StepSelectType";
-import StepNonBridalCount from "./components/StepNonBridalCount";
-import StepNonBridalEvents from "./components/StepNonBridalEvents";
-import StepBridalEvents from "./components/StepBridalEvents";
-import StepContact from "./components/StepContact";
-import { useGoogleAddressAutocomplete } from "./hooks/useGoogleAddressAutocomplete";
-import { validateEventsComplete, validateBridalEventsComplete } from "./utils/validation";
+} from "@/types/request-types";
+import StepSelectType from "@/components/request/StepSelectType";
+import StepNonBridalCount from "@/components/request/StepNonBridalCount";
+import StepNonBridalEvents from "@/components/request/StepNonBridalEvents";
+import StepBridalEvents from "@/components/request/StepBridalEvents";
+import StepContact from "@/components/request/StepContact";
+import { useGoogleAddressAutocomplete } from "@/hooks/useGoogleAddressAutocomplete";
+import { validateEventsComplete, validateBridalEventsComplete } from "@/lib/request/validation";
 import { toast } from "sonner";
 const toServiceCode = (s: string) =>
   s.trim().toLowerCase() as "makeup" | "hair" | "combo";
@@ -123,6 +123,7 @@ export default function RequestQuote() {
     }
 
     setIsSubmitting(true);
+    const minShowMs = 300;
     
     const payload = {
       serviceType: selected, // "Bridal" | "Non-Bridal"

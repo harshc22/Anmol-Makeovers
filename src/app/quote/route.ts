@@ -66,6 +66,7 @@ export async function POST(req: NextRequest) {
       provider: "gmail",
       provider_id: providerId,
       status,
+      client_email: parsed.contact.email,
     });
     if (error) throw new Error(`email_log insert error: ${error.message}`);
 

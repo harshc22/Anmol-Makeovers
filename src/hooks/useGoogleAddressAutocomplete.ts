@@ -1,8 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import type { MutableRefObject } from "react";
-import type { ContactInfo } from "../types";
-import { getGoogleLoader } from "../loaderSingleton";
+import type { ContactInfo } from "@/types/request-types";
+import { getGoogleLoader } from "@/lib/request/loaderSingleton";
 
 export function useGoogleAddressAutocomplete(
   step: number,

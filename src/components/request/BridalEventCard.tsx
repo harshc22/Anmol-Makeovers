@@ -1,7 +1,7 @@
 "use client";
 import React, { memo } from "react";
-import type { BridalEventData } from "../types";
-import { BridalEventField } from "../types";
+import type { BridalEventData } from "@/types/request-types";
+import { BridalEventField } from "@/types/request-types";
 
 interface Props {
   index: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { CheckCircle, Mail, Phone, Clock } from "lucide-react";
+import { CheckCircle} from "lucide-react";
 import { Suspense } from "react";
 
 function SuccessContent() {
