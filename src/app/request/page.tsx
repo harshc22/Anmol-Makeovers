@@ -123,6 +123,7 @@ export default function RequestQuote() {
     }
 
     setIsSubmitting(true);
+    const minShowMs = 300;
     
     const payload = {
       serviceType: selected, // "Bridal" | "Non-Bridal"
