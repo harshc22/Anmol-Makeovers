@@ -1,0 +1,22 @@
+{
+  "testimonial": [
+    {
+      "name": "Anna B.",
+      "location": "Bride · Toronto",
+      "message": "My bridal look was flawless and lasted all day—from photos to reception. Exactly what I hoped for.",
+      "img": "images/testimonials/anna.jpg"
+    },
+    {
+      "name": "Priya S.",
+      "location": "Event · Mississauga",
+      "message": "Soft glam that photographed beautifully. Super professional and on time.",
+      "img": "images/testimonials/priya.jpg"
+    },
+    {
+      "name": "Michael R.",
+      "location": "Photographer",
+      "message": "Editorial shoot was consistent across setups. Great on-set collaboration and attention to detail.",
+      "img": "images/testimonials/michael.jpg"
+    }
+  ]
+}

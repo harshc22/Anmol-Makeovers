@@ -2,7 +2,9 @@
 
 /* Mobile form field optimizations */
 @layer base {
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -10,7 +12,7 @@
     font-size: 16px; /* Prevents zoom on iOS */
     line-height: 1.5;
   }
-  
+
   /* iOS Safari specific fixes */
   input[type="text"],
   input[type="email"],
@@ -31,16 +33,16 @@
     font-size: 16px; /* Prevents zoom on iOS */
     min-height: 48px; /* Better touch targets */
   }
-  
+
   /* Focus states for mobile */
   input:focus,
   select:focus,
   textarea:focus {
     outline: none;
-    border-color: #FB6F92;
+    border-color: #fb6f92;
     box-shadow: 0 0 0 2px rgba(251, 111, 146, 0.2);
   }
-  
+
   /* Select dropdown styling */
   select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
@@ -49,7 +51,7 @@
     background-size: 1.5em 1.5em;
     padding-right: 2.5rem;
   }
-  
+
   /* Mobile-optimized button styles */
   button {
     -webkit-appearance: none;
@@ -71,13 +73,13 @@
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   /* Prevent button text shifting on mobile */
   button:active {
     transform: none;
     -webkit-transform: none;
   }
-  
+
   /* Disabled button styles */
   button:disabled {
     opacity: 0.5;
@@ -91,21 +93,21 @@
     background-color: #ffffff;
   }
   .bg-primary {
-    background-color: #FB6F92;
+    background-color: #fb6f92;
   }
   .bg-accent {
-    background-color: #FFC2D1;
+    background-color: #ffc2d1;
   }
   .hover\:bg-primaryHover:hover {
     background-color: #ff2e63;
   }
 
-  .hover\:text-primary:hover{
-    color: #FB6F92;
+  .hover\:text-primary:hover {
+    color: #fb6f92;
   }
-  
-  .hover\:border-primary:hover{
-    border-color: #FB6F92;
+
+  .hover\:border-primary:hover {
+    border-color: #fb6f92;
   }
 
   .text-dark {
@@ -115,20 +117,27 @@
     color: #ffffff;
   }
   .border-primary {
-    border-color: #FB6F92;
+    border-color: #fb6f92;
   }
-  .border-gray{
+  .border-gray {
     border-color: lightgray;
   }
-  .text-heading{
-    color: #1f1f1f
+  .text-heading {
+    color: #1f1f1f;
   }
   .hover\:bg-accent:hover {
-    background-color: #FFC2D1;
+    background-color: #ffc2d1;
   }
 
   .ring-primary {
-    --tw-ring-color: #FB6F92;
+    --tw-ring-color: #fb6f92;
   }
 
+  .swiper-pagination-bullet {
+    background: lightgray;
+    opacity: 1;
+  }
+  .swiper-pagination-bullet-active {
+    background: #fb6f92;
+  }
 }
