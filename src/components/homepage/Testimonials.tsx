@@ -75,17 +75,17 @@ export default function Testimonials({
   return (
     <section
       aria-labelledby="testimonials-title"
-      className={`relative w-full bg-white text-black ${className}`}
+      className={`relative w-full bg-white text-black border-t border-gray ${className}`}
     >
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
         <header className="mb-8 text-center">
           <h2
             id="testimonials-title"
-            className="text-3xl font-semibold tracking-tight sm:text-4xl"
+            className="text-4xl font-serif text-center leading-tight text-dark sm:text-5xl"
           >
             {title}
           </h2>
-          <p className="mt-2 text-sm text-zinc-600">Real words from recent clients.</p>
+          <p className="mt-2 text-sm text-zinc-600">Real words from recent clients</p>
         </header>
 
         {/* Mobile: Embla carousel */}
@@ -124,19 +124,6 @@ export default function Testimonials({
             </button>
           </div>
 
-          {/* Dots */}
-          <div className="mt-4 flex items-center justify-center gap-2">
-            {scrollSnaps.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollTo(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={`h-1.5 w-6 rounded-full transition-all ${
-                  selected === i ? "bg-zinc-900 w-8" : "bg-zinc-300 hover:bg-zinc-400"
-                }`}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Desktop: clean grid (no carousel for better layout) */}
@@ -170,12 +157,12 @@ function Slide({
 function Card({ quote, name }: Testimonial) {
   return (
     <article className="group relative">
-      <div className="relative rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
+      <div className="relative rounded-3xl border-2 border-primary bg-gradient-to-t from-[#ffc2d1] to-white to-75% p-6 shadow-sm transition-shadow duration-200 hover:shadow-md hover:scale-[1.02]">
         {/* Decorative quote mark */}
-        <Quote className="absolute right-6 top-6 h-8 w-8 text-zinc-300" aria-hidden="true" />
+        <Quote className="absolute right-4 top-6 h-9 w-9 text-pink transition-shadow hover:scale-[1.2]" aria-hidden="true" />
 
         {/* Content */}
-        <blockquote className="pr-6 font-serif text-pretty text-xl leading-relaxed text-zinc-900">
+        <blockquote className="pr-8 font-serif text-pretty text-xl leading-relaxed text-zinc-900">
           {quote}
         </blockquote>
 

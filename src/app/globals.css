@@ -116,6 +116,10 @@
   .text-light {
     color: #ffffff;
   }
+  .text-pink{
+    color: #ffc2d1;
+  }
+
   .border-primary {
     border-color: #fb6f92;
   }
