@@ -85,7 +85,7 @@ export default function AboutPage() {
           </div>
 
           <div className="md:col-span-6">
-            <p className="max-w-lg text-lg text-dark/90">
+            <p className="font-serif text-2xl leading-[1.35] text-dark md:text-[28px]">
               Ready to tell your story? Browse available services, then book a
               free consultation. Let&apos;s bring your beauty vision to life.
             </p>

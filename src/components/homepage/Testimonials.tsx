@@ -54,18 +54,29 @@ export default function Testimonials({
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+  const [isDragging, setIsDragging] = React.useState(false);
 
   React.useEffect(() => {
     if (!emblaApi) return;
+
+    const onPointerDown = () => setIsDragging(true);
+    const onPointerUp = () => setIsDragging(false);
+    const onSettle = () => setIsDragging(false);
 
     setScrollSnaps(emblaApi.scrollSnapList());
     setSelectedIndex(emblaApi.selectedScrollSnap());
 
     const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
     emblaApi.on("select", onSelect);
+    emblaApi.on("pointerDown", onPointerDown);
+    emblaApi.on("pointerUp", onPointerUp);
+    emblaApi.on("settle", onSettle);
 
     return () => {
       emblaApi.off("select", onSelect);
+      emblaApi.off("pointerDown", onPointerDown);
+      emblaApi.off("pointerUp", onPointerUp);
+      emblaApi.off("settle", onSettle);
     };
   }, [emblaApi]);
 
@@ -121,7 +132,10 @@ export default function Testimonials({
         <div className="relative">
           {/* Viewport */}
           <div
-            className="overflow-hidden grow py-4 px-3"
+            className={clsx(
+              "overflow-hidden grow py-4 px-3 touch-pan-y",
+              isDragging && "select-none"
+            )}
             ref={emblaRef}
             aria-roledescription="carousel"
             aria-label="Testimonials carousel"
