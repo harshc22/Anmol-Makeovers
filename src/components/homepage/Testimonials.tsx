@@ -188,7 +188,12 @@ function Card({
           className="absolute right-4 top-6 h-9 w-9 text-pink hover:scale-110 transition"
           aria-hidden="true"
         />
-        <blockquote className={clsx("pr-8 text-pretty text-base leading-relaxed text-zinc-900 flex-1", minQuoteHeight)}>
+        <blockquote
+          className={clsx(
+            "pr-8 text-pretty text-base leading-relaxed text-zinc-900 flex-1",
+            minQuoteHeight
+          )}
+        >
           {quote}
         </blockquote>
         <footer className="mt-4 flex items-center justify-between">
