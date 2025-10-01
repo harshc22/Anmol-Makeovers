@@ -33,7 +33,7 @@ const cards: Card[] = [
 
 export default function ServicesShowcase() {
   return (
-    <section className="bg-background border-t border-gray mt-20 pt-10 pb-10">
+    <section className="bg-background border-t border-gray-100 mt-20 pt-10 pb-10">
       <div className="mx-auto max-w-7xl px-6">
         <h2 className="text-4xl font-serif text-center leading-tight text-dark sm:text-5xl">
           SERVICES

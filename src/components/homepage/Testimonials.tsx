@@ -4,6 +4,7 @@ import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { Quote } from "lucide-react";
+import clsx from "clsx";
 
 export type Testimonial = {
   quote: string;
@@ -70,44 +71,67 @@ export default function Testimonials({
 
   if (!items?.length) return null;
 
-  const basisSm = `basis-${toFraction(slidesPerView.sm ?? 1)}`;
-  const basisMd = slidesPerView.md
-    ? `md:basis-${toFraction(slidesPerView.md)}`
-    : "";
-  const basisLg = slidesPerView.lg
-    ? `lg:basis-${toFraction(slidesPerView.lg)}`
-    : "";
+  // Literal classes (Tailwind can see these at build time)
+  const slideClass = clsx(
+    "min-w-0 shrink-0 grow-0 pl-4",
+    // base
+    (slidesPerView.sm ?? 1) === 1 && "basis-full",
+    (slidesPerView.sm ?? 1) === 2 && "basis-1/2",
+    (slidesPerView.sm ?? 1) === 3 && "basis-1/3",
+    (slidesPerView.sm ?? 1) === 4 && "basis-1/4",
+    (slidesPerView.sm ?? 1) === 5 && "basis-[20%]",
+    (slidesPerView.sm ?? 1) === 6 && "basis-1/6",
+    // md
+    slidesPerView.md === 1 && "md:basis-full",
+    slidesPerView.md === 2 && "md:basis-1/2",
+    slidesPerView.md === 3 && "md:basis-1/3",
+    slidesPerView.md === 4 && "md:basis-1/4",
+    slidesPerView.md === 5 && "md:basis-[20%]",
+    slidesPerView.md === 6 && "md:basis-1/6",
+    // lg
+    slidesPerView.lg === 1 && "lg:basis-full",
+    slidesPerView.lg === 2 && "lg:basis-1/2",
+    slidesPerView.lg === 3 && "lg:basis-1/3",
+    slidesPerView.lg === 4 && "lg:basis-1/4",
+    slidesPerView.lg === 5 && "lg:basis-[20%]",
+    slidesPerView.lg === 6 && "lg:basis-1/6"
+  );
 
   return (
     <section
       aria-labelledby="testimonials-title"
-      className={`relative w-full bg-white text-black border-t border-gray ${className}`}
+      className={clsx(
+        "relative w-full bg-white text-black border-t border-gray-100",
+        className
+      )}
     >
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
         <header className="mb-8 text-center">
           <h2
             id="testimonials-title"
-            className="text-4xl font-serif text-center leading-tight text-dark sm:text-5xl"
+            className="text-4xl font-serif text-center leading-tight text-zinc-900 sm:text-5xl"
           >
             {title}
           </h2>
-          <p className="mt-2 text-md text-gray-700">
+          <p className="mt-2 text-base text-gray-700">
             What my clients are saying
           </p>
         </header>
 
         <div className="relative">
+          {/* Viewport */}
           <div
             className="overflow-hidden grow py-4 px-3"
             ref={emblaRef}
             aria-roledescription="carousel"
             aria-label="Testimonials carousel"
           >
+            {/* Track */}
             <div className="flex -ml-4 items-stretch">
               {items.map((t, i) => (
                 <div
                   key={i}
-                  className={`min-w-0 shrink-0 grow-0 pl-4 ${basisSm} ${basisMd} ${basisLg}`}
+                  className={slideClass}
                   role="group"
                   aria-roledescription="slide"
                   aria-label={`Slide ${i + 1} of ${items.length}`}
@@ -123,8 +147,7 @@ export default function Testimonials({
           </div>
         </div>
 
-        {/* Dots under the track */}
-        {/* Dots under the track (decorative look, clickable) */}
+        {/* Dots (decorative look, clickable) */}
         <div className="mt-6 flex items-center justify-center gap-0.5">
           {scrollSnaps.map((_, index) => (
             <button
@@ -132,17 +155,18 @@ export default function Testimonials({
               type="button"
               onClick={() => {
                 emblaApi?.scrollTo(index);
-                plugin.current?.play(); // resume autoplay after navigation
+                plugin.current?.play(); // keep autoplay alive
               }}
               aria-label={`Go to slide ${index + 1}`}
               className="p-2"
             >
               <span
-                className={`block h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full transition-colors ${
+                className={clsx(
+                  "block rounded-full transition-colors h-1.5 w-1.5 sm:h-2 sm:w-2",
                   index === selectedIndex
                     ? "bg-primary"
                     : "bg-zinc-300 hover:bg-zinc-400"
-                }`}
+                )}
               />
             </button>
           ))}
@@ -164,9 +188,7 @@ function Card({
           className="absolute right-4 top-6 h-9 w-9 text-pink hover:scale-110 transition"
           aria-hidden="true"
         />
-        <blockquote
-          className={`pr-8 text-pretty text-l leading-relaxed text-zinc-900 flex-1 ${minQuoteHeight}`}
-        >
+        <blockquote className={clsx("pr-8 text-pretty text-base leading-relaxed text-zinc-900 flex-1", minQuoteHeight)}>
           {quote}
         </blockquote>
         <footer className="mt-4 flex items-center justify-between">
@@ -178,25 +200,6 @@ function Card({
       </div>
     </article>
   );
-}
-
-function toFraction(n: number): string {
-  switch (n) {
-    case 1:
-      return "full";
-    case 2:
-      return "1/2";
-    case 3:
-      return "1/3";
-    case 4:
-      return "1/4";
-    case 5:
-      return "[20%]";
-    case 6:
-      return "1/6";
-    default:
-      return "full";
-  }
 }
 
 function usePrefersReducedMotion() {
