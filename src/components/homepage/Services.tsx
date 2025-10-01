@@ -49,7 +49,7 @@ export default function ServicesShowcase() {
         <div className="mt-10 text-center">
           <a
             href="/request"
-            className="mx-auto flex w-full max-w-[400px] items-center justify-center rounded-full border-2 border-[#4f772d] px-3 py-4 font-semibold tracking-wide transition hover:bg-[#90a955]"
+            className="mx-auto flex w-full max-w-[400px] items-center justify-center rounded-full border-2 border-primary px-3 py-4 font-semibold tracking-wide transition hover:bg-accent"
           >
             GET IN TOUCH
           </a>
