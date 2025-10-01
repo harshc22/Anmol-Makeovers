@@ -51,9 +51,6 @@ export default function AboutPage() {
                 priority
               />
             </div>
-
-            {/* decorative corner circle — keep it off on phones */}
-            <span className="pointer-events-none absolute -right-6 -top-6  h-24 w-24 rounded-full border-2 border-gray/40" />
           </div>
         </div>
       </section>
