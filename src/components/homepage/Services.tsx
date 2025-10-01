@@ -1,6 +1,6 @@
 "use client";
 
-import {motion} from "framer-motion"
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 type Card = {
@@ -81,14 +81,14 @@ function EqualTile({ title, blurb, img, alt }: Card) {
         {/* stronger gradient behind text */}
         <div className="absolute inset-0 flex items-end">
           <div className="relative w-full p-6">
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
             {/* text always sits on top of the gradient */}
             <div className="relative">
-              <h3 className="text-xl font-serif text-white drop-shadow-md">
+              <h3 className="text-white text-xl font-bold tracking-tight text-balance drop-shadow-md">
                 {title}
               </h3>
-              <p className="mt-2 max-w-[40ch] text-sm leading-relaxed text-white/90">
+              <p className="mt-2 max-w-[40ch] text-md leading-relaxed text-white/90">
                 {blurb}
               </p>
             </div>
