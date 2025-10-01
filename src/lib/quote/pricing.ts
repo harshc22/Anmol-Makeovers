@@ -83,7 +83,6 @@ export function computeBreakdown(
   const breakdown = parsed.events.map<EventBreakdown>((e) => {
     const codes = codesFor(parsed.serviceType, e.services, catalog);
     let eventSubtotal = 0;
-    const lines: EventBreakdown["lines"] = [];
 
     for (const code of codes) {
       const item = catalog[code];
@@ -95,17 +94,14 @@ export function computeBreakdown(
 
       const amount = item.price_cents * peopleCount; // per-person pricing
       eventSubtotal += amount;
-      lines.push({ label: item.name, amount_cents: amount });
     }
 
     return {
       eventType: e.eventType,
       date: e.date,
       time: e.time,
-      location: e.location || parsed.contact.address,
       people: typeof e.people === "string" ? Number(e.people) : e.people,
       services: e.services,
-      lines,
       event_subtotal_cents: eventSubtotal,
     };
   });
