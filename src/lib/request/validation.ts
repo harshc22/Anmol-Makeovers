@@ -30,6 +30,5 @@ export function validateContact(info: ContactInfo): string | null {
   const digits = info.phone.replace(/\D/g, "");
   if (!digits || !phoneDigitsRegex.test(digits))
     return "Please enter a valid phone number.";
-  if (!info.address.trim()) return "Please enter your street address.";
   return null;
 }

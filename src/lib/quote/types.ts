@@ -13,19 +13,13 @@ export interface CatalogItem {
 }
 export type Catalog = Record<string, CatalogItem>;
 
-export interface LineItem {
-  label: string;
-  amount_cents: number;
-}
 
 export interface EventBreakdown {
   eventType: string;
   date: string;
   time: string;
-  location: string;
   people: number;
   services: Service[];
-  lines: LineItem[];
   event_subtotal_cents: number;
 }
 

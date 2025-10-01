@@ -65,7 +65,6 @@ export default function RequestQuote() {
     name: "",
     email: "",
     phone: "",
-    address: "",
     notes: "",
   });
 
@@ -132,7 +131,6 @@ export default function RequestQuote() {
             eventType: e.eventType.trim(),
             date: e.date,
             time: e.time,
-            location: (e.location || contactInfo.address).trim(),
             people: 1,
             services: ["makeup", "hair"], // Auto-include for bridal
           }))
@@ -140,7 +138,6 @@ export default function RequestQuote() {
             eventType: e.eventType.trim(),
             date: e.date,
             time: e.time,
-            location: (e.location || contactInfo.address).trim(),
             people: Number(e.people),
             services: e.services.map(toServiceCode),
           })),
@@ -148,7 +145,6 @@ export default function RequestQuote() {
         name: contactInfo.name.trim(),
         email: contactInfo.email.trim(),
         phone: contactInfo.phone.replace(/\D/g, ""), // digits only
-        address: contactInfo.address.trim(),
         notes: contactInfo.notes?.trim() || undefined,
       },
       recaptchaToken,
