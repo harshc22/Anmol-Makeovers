@@ -47,7 +47,7 @@ export default function AboutPage() {
                 alt="Editorial beauty portrait by Anmol"
                 fill
                 sizes="(min-width: 1024px) 520px, 100vw"
-                className="object-cover"
+                className="object-cover no-select"
                 priority
               />
             </div>
@@ -125,7 +125,7 @@ export default function AboutPage() {
               alt="Soft glam portrait"
               width={1400}
               height={900}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover no-select"
             />
           </div>
           <div className="overflow-hidden rounded-3xl">
@@ -134,7 +134,7 @@ export default function AboutPage() {
               alt="Editorial beauty closeup"
               width={1400}
               height={900}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover no-select"
             />
           </div>
         </div>

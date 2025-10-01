@@ -149,4 +149,9 @@
     --tw-ring-color: #fb6f92;
   }
 
+  .no-select {
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
 }
