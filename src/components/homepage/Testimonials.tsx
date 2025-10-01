@@ -3,7 +3,7 @@
 import * as React from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { Quote } from "lucide-react";
+import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
 
 export type Testimonial = {
   quote: string;
@@ -37,7 +37,7 @@ export default function Testimonials({
 }: TestimonialsProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Embla on all breakpoints; dots removed by design
+  // Single Embla instance across all breakpoints
   const plugin = React.useRef(
     prefersReducedMotion ? undefined : Autoplay({ delay: autoplayMs, stopOnInteraction: true })
   );
@@ -98,56 +98,87 @@ export default function Testimonials({
         </header>
 
         <div className="relative" onKeyDown={(e) => handleArrowKeys(e, scrollPrev, scrollNext)}>
-          <div
-            className="overflow-hidden py-4 px-3"
-            ref={emblaRef}
-            aria-roledescription="carousel"
-            aria-label="Testimonials carousel"
-          >
-            <div className="flex -ml-4 items-stretch">
-              {items.map((t, i) => (
-                <div
-                  key={i}
-                  className={`min-w-0 shrink-0 grow-0 pl-4 ${basisSm} ${basisMd} ${basisLg}`}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`Slide ${i + 1} of ${items.length}`}
-                >
-                  <Card quote={t.quote} name={t.name} minQuoteHeight={minQuoteHeight} />
-                </div>
-              ))}
+          {/* Arrows outside the viewport, on the sides (desktop). Single viewport instance. */}
+          <div className="flex items-center gap-3">
+            {showArrows ? (
+              <ArrowButton
+                dir="prev"
+                onClick={scrollPrev}
+                label="Previous testimonial"
+                className="hidden md:inline-flex"
+              />
+            ) : (
+              <div className="hidden md:block w-0" />
+            )}
+
+            <div
+              className="overflow-hidden grow py-4 px-3"
+              ref={emblaRef}
+              aria-roledescription="carousel"
+              aria-label="Testimonials carousel"
+            >
+              <div className="flex -ml-4 items-stretch">
+                {items.map((t, i) => (
+                  <div
+                    key={i}
+                    className={`min-w-0 shrink-0 grow-0 pl-4 ${basisSm} ${basisMd} ${basisLg}`}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`Slide ${i + 1} of ${items.length}`}
+                  >
+                    <Card quote={t.quote} name={t.name} minQuoteHeight={minQuoteHeight} />
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {showArrows ? (
+              <ArrowButton
+                dir="next"
+                onClick={scrollNext}
+                label="Next testimonial"
+                className="hidden md:inline-flex"
+              />
+            ) : (
+              <div className="hidden md:block w-0" />
+            )}
           </div>
 
+          {/* Mobile controls under the track */}
           {showArrows && (
-            <div className="pointer-events-none absolute inset-y-0 left-0 right-0 hidden md:flex items-center justify-between">
+            <div className="mt-6 flex items-center justify-center gap-4 md:hidden">
               <ArrowButton dir="prev" onClick={scrollPrev} label="Previous testimonial" />
               <ArrowButton dir="next" onClick={scrollNext} label="Next testimonial" />
             </div>
           )}
-
-          {/* Mobile controls under track */}
-          <div className="mt-6 flex items-center justify-center gap-4 md:hidden">
-            <ArrowButton dir="prev" onClick={scrollPrev} label="Previous testimonial" />
-            <ArrowButton dir="next" onClick={scrollNext} label="Next testimonial" />
-          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function ArrowButton({ dir, onClick, label }: { dir: "prev" | "next"; onClick: () => void; label: string }) {
+function ArrowButton({
+  dir,
+  onClick,
+  label,
+  className = "",
+}: {
+  dir: "prev" | "next";
+  onClick: () => void;
+  label: string;
+  className?: string;
+}) {
+  const Icon = dir === "prev" ? ChevronLeft : ChevronRight;
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`pointer-events-auto rounded-xl border border-zinc-200 bg-white/90 px-3 py-2 text-sm text-zinc-800 shadow-sm hover:bg-white active:scale-[0.98] ${
-        dir === "prev" ? "ml-1" : "mr-1"
-      }`}
+      className={`inline-flex items-center justify-center rounded-xl border px-3 py-2 text-sm shadow-sm active:scale-[0.98]
+        border-primary/30 bg-white text-primary hover:bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary/40 ${className}`}
     >
-      {dir === "prev" ? "←" : "→"}
+      <Icon className="h-5 w-5" aria-hidden="true" />
+      <span className="sr-only">{label}</span>
     </button>
   );
 }
@@ -155,14 +186,14 @@ function ArrowButton({ dir, onClick, label }: { dir: "prev" | "next"; onClick: (
 function Card({ quote, name, minQuoteHeight }: Testimonial & { minQuoteHeight: string }) {
   return (
     <article className="group relative h-full">
-      <div className="relative flex h-full flex-col rounded-3xl border-2 border-primary bg-gradient-to-t from-[#ffc2d1] to-white to-75% p-6 shadow-sm transition-transform duration-200 hover:shadow-md hover:scale-[1.02]">
-        <Quote className="absolute right-4 top-6 h-9 w-9 text-pink hover:scale-[1.2]" aria-hidden="true" />
-        <blockquote className={`pr-8 font-serif text-pretty text-xl leading-relaxed text-zinc-900 flex-1 ${minQuoteHeight}`}>
+      <div className="relative flex h-full flex-col rounded-3xl border-3 border-gray-200 p-6 shadow-sm transition-transform duration-200 hover:shadow-md hover:scale-[1.02]">
+        <Quote className="absolute right-4 top-6 h-9 w-9 text-[#cdb4db]" aria-hidden="true" />
+        <blockquote className={`pr-8  text-pretty text-l leading-relaxed text-zinc-900 flex-1 ${minQuoteHeight}`}>
           {quote}
         </blockquote>
         <footer className="mt-8 flex items-center justify-between">
           <div className="inline-flex items-center gap-2 text-sm font-medium tracking-wide text-zinc-700">
-            <div className="h-1.5 w-6 rounded-full bg-zinc-900" />
+            <div className="h-1.5 w-6 rounded-full bg-[#cdb4db]" />
             <span aria-label="Author">{name}</span>
           </div>
         </footer>
@@ -181,7 +212,7 @@ function handleArrowKeys(
 }
 
 function toFraction(n: number): string {
-  // map 1..6 to Tailwind fractions (1=full, 2=1/2, 3=1/3, 4=1/4, 5=\[20%], 6=1/6)
+  // map 1..6 to Tailwind fractions (1=full, 2=1/2, 3=1/3, 4=1/4, 5=[20%], 6=1/6)
   switch (n) {
     case 1:
       return "full";

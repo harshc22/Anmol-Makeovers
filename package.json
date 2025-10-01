@@ -19,7 +19,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "framer-motion": "^12.23.12",
+    "framer-motion": "^12.23.22",
     "hamburger-react": "^2.5.2",
     "libphonenumber-js": "^1.12.10",
     "lucide-react": "^0.544.0",

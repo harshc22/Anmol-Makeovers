@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import {motion} from "framer-motion"
 import Image from "next/image";
-import { FaInstagram } from "react-icons/fa";
 
 type Card = {
   title: string;
@@ -50,7 +49,7 @@ export default function ServicesShowcase() {
         <div className="mt-10 text-center">
           <a
             href="/request"
-            className="mx-auto flex w-full max-w-[400px] items-center justify-center rounded-full border-2 border-primary px-3 py-4 font-semibold tracking-wide transition hover:bg-accent"
+            className="mx-auto flex w-full max-w-[400px] items-center justify-center rounded-full border-2 border-[#4f772d] px-3 py-4 font-semibold tracking-wide transition hover:bg-[#90a955]"
           >
             GET IN TOUCH
           </a>
@@ -62,7 +61,13 @@ export default function ServicesShowcase() {
 
 function EqualTile({ title, blurb, img, alt }: Card) {
   return (
-    <article className="group h-full overflow-hidden rounded-2xl border border-gray bg-white shadow-sm transition hover:shadow-md">
+    <motion.article
+      className="group h-full overflow-hidden rounded-2xl border border-gray bg-white shadow-sm transition hover:shadow-md"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       {/* Lock the height with aspect ratio */}
       <div className="relative aspect-[4/5] w-full">
         <Image
@@ -90,6 +95,6 @@ function EqualTile({ title, blurb, img, alt }: Card) {
           </div>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
