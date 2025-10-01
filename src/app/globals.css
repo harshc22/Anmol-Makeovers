@@ -144,4 +144,8 @@
   .swiper-pagination-bullet-active {
     background: #fb6f92;
   }
+
+  .focus-ring-primary {
+    --tw-ring-color: #fb6f92;
+  }
 }
