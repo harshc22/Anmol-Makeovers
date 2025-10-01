@@ -113,7 +113,7 @@ export default function Testimonials({
           >
             {title}
           </h2>
-          <p className="mt-2 text-base text-gray-700">
+          <p className="mt-2 text-base text-neutral-600">
             What my clients are saying
           </p>
         </header>

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { useInView } from "framer-motion";
 import Image from "next/image";
 
 type Card = {
@@ -39,10 +40,10 @@ export default function ServicesShowcase() {
           SERVICES
         </h2>
 
-        {/* Uniform grid, equal tiles */}
+        {/* CSS-only reveal + light stagger via inline delay */}
         <div className="mt-8 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {cards.map((card) => (
-            <EqualTile key={card.title} {...card} />
+          {cards.map((card, i) => (
+            <EqualTile key={card.title} index={i} {...card} />
           ))}
         </div>
 
@@ -59,31 +60,45 @@ export default function ServicesShowcase() {
   );
 }
 
-function EqualTile({ title, blurb, img, alt }: Card) {
+function EqualTile({
+  title,
+  blurb,
+  img,
+  alt,
+  index,
+}: Card & { index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -12% 0px" });
+
   return (
-    <motion.article
-      className="group h-full overflow-hidden rounded-2xl border border-gray bg-white shadow-sm transition hover:shadow-md"
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+    <article
+      ref={ref}
+      className={[
+        "group h-full overflow-hidden rounded-2xl border border-gray bg-white shadow-sm",
+        "transform-gpu [backface-visibility:hidden] [transform-style:preserve-3d] [contain:paint]",
+        "transition-transform transition-opacity duration-500 ease-[cubic-bezier(.16,1,.3,1)]",
+        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
+      ].join(" ")}
+      style={{ transitionDelay: `${index * 80}ms` }}
     >
-      {/* Lock the height with aspect ratio */}
-      <div className="relative aspect-[4/5] w-full">
+      {/* Stable backdrop prevents blank → image flash on mobile */}
+      <div className="relative aspect-[4/5] w-full bg-neutral-100">
         <Image
           src={img}
           alt={alt}
           fill
+          // First image eager; rest lazy = smoother first paint, less decode thrash
+          priority={index === 0}
+          loading={index === 0 ? "eager" : "lazy"}
+          decoding="async"
           sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          className="object-cover transition-transform duration-300 md:group-hover:scale-[1.03] transform-gpu"
         />
 
-        {/* stronger gradient behind text */}
+        {/* Non-animated overlay to avoid opacity flashes */}
         <div className="absolute inset-0 flex items-end">
           <div className="relative w-full p-6">
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-
-            {/* text always sits on top of the gradient */}
             <div className="relative">
               <h3 className="text-white text-xl font-bold tracking-tight text-balance drop-shadow-md">
                 {title}
@@ -95,6 +110,6 @@ function EqualTile({ title, blurb, img, alt }: Card) {
           </div>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }

@@ -116,7 +116,7 @@
   .text-light {
     color: #ffffff;
   }
-  .text-pink{
+  .text-pink {
     color: #ffc2d1;
   }
 
@@ -145,7 +145,8 @@
     background: #fb6f92;
   }
 
-  .focus-ring-primary {
+  .custom-focus-ring:focus {
     --tw-ring-color: #fb6f92;
   }
+
 }
