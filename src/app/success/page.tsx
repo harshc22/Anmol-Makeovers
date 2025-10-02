@@ -30,7 +30,7 @@ function SuccessContent() {
         </div>
 
         {/* Main Message */}
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-heading mb-4">
+        <h1 className="text-3xl md:text-4xl font-serif  text-heading mb-4">
           Request Submitted Successfully!
         </h1>
         

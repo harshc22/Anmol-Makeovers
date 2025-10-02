@@ -2,6 +2,7 @@
 import React, { memo } from "react";
 import type { BridalEventData } from "@/types/request-types";
 import { BridalEventField } from "@/types/request-types";
+import AddressAutocomplete from "@/components/request/AddressAutocomplete";
 
 interface Props {
   index: number;
@@ -95,17 +96,15 @@ function BridalEventCard({ index, event, today, onChange }: Props) {
             >
               On-site Address
             </label>
-            <input
-              id={`addr-${index}`}
-              type="text"
-              placeholder="Street, City, Province, Postal code"
-              className="w-full text-dark transition-colors"
-              value={event.locationAddress}
-              onChange={(e) =>
-                onChange(index, "locationAddress", e.target.value)
-              }
-              required
-              aria-required="true"
+            <AddressAutocomplete
+              inputId={`addr-${index}`}
+              defaultValue={event.locationAddress}
+              country="ca"
+              onSelect={({ address, placeId }) => {
+                onChange(index, "locationAddress", address);
+                onChange(index, "locationPlaceId", placeId);
+                // (optional) you can trigger a fee preview here by calling your API
+              }}
             />
             <p className="text-xs text-muted">
               Exact address helps us estimate timing and any travel fees.

@@ -14,7 +14,6 @@ import StepNonBridalCount from "@/components/request/StepNonBridalCount";
 import StepNonBridalEvents from "@/components/request/StepNonBridalEvents";
 import StepBridalEvents from "@/components/request/StepBridalEvents";
 import StepContact from "@/components/request/StepContact";
-import { useGoogleAddressAutocomplete } from "@/hooks/useGoogleAddressAutocomplete";
 import { validateEventsComplete, validateBridalEventsComplete } from "@/lib/request/validation";
 import { toast } from "sonner";
 const toServiceCode = (s: string) =>
@@ -84,12 +83,6 @@ export default function RequestQuote() {
   const today = new Date().toISOString().split("T")[0];
   const addressInputRef = useRef<HTMLInputElement | null>(null);
 
-  useGoogleAddressAutocomplete(
-    step,
-    contactInfo,
-    (updater) => setContactInfo(updater(contactInfo)),
-    addressInputRef
-  );
 
   // navigation handlers
   const goNextFromType = () => {

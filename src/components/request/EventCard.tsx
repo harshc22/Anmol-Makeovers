@@ -2,6 +2,7 @@
 import React, { memo } from "react";
 import type { EventData } from "@/types/request-types";
 import { NonServiceField } from "@/types/request-types";
+import AddressAutocomplete from "@/components/request/AddressAutocomplete";
 
 interface Props {
   index: number;
@@ -73,6 +74,39 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
         ))}
       </select>
 
+      <div>
+        <label className="block text-sm font-medium text-heading mb-2">
+          Services{" "}
+          <span className="text-sm text-gray-500">(you can choose both)</span>
+        </label>
+        <div className="grid grid-cols-2 gap-4">
+          {services.map((service) => {
+            const selected = event.services.includes(service);
+            const id = `svc-${index}-${service.toLowerCase()}`;
+            return (
+              <label
+                key={service}
+                htmlFor={id}
+                className={`flex items-center justify-center rounded-full border text-lg font-medium py-3 cursor-pointer transition-all duration-200 ${
+                  selected
+                    ? "bg-accent text-dark border-primary shadow-md"
+                    : "bg-background text-dark border-gray hover:bg-accent/70"
+                }`}
+              >
+                <input
+                  id={id}
+                  type="checkbox"
+                  className="hidden"
+                  checked={selected}
+                  onChange={() => onToggleService(index, service)}
+                />
+                {service}
+              </label>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Ready Location */}
       <div className="space-y-2">
         <label className="block text-sm font-medium text-heading">
@@ -117,23 +151,20 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
             >
               On-site Address
             </label>
-            <input
-              id={`addr-${index}`}
-              type="text"
-              placeholder="Street, City, Province, Postal code"
-              className="w-full text-dark transition-colors"
-              value={event.locationAddress}
-              onChange={(e) =>
-                onChange(index, "locationAddress", e.target.value)
-              }
-              required
-              aria-required="true"
+            <AddressAutocomplete
+              inputId={`addr-${index}`}
+              defaultValue={event.locationAddress}
+              country="ca"
+              onSelect={({ address, placeId }) => {
+                onChange(index, "locationAddress", address);
+                onChange(index, "locationPlaceId", placeId);
+                // (optional) you can trigger a fee preview here by calling your API
+              }}
             />
             <p className="text-xs text-muted">
               Exact address helps us estimate timing and any travel fees.
             </p>
           </div>
-          
         )}
 
         {event.locationType === "studio" && (
@@ -142,43 +173,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
               Located in Brampton, near Trinity Common Mall
             </p>
           </div>
-          
         )}
-
-        
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-heading mb-2">
-          Services{" "}
-          <span className="text-sm text-gray-500">(you can choose both)</span>
-        </label>
-        <div className="grid grid-cols-2 gap-4">
-          {services.map((service) => {
-            const selected = event.services.includes(service);
-            const id = `svc-${index}-${service.toLowerCase()}`;
-            return (
-              <label
-                key={service}
-                htmlFor={id}
-                className={`flex items-center justify-center rounded-full border text-lg font-medium py-3 cursor-pointer transition-all duration-200 ${
-                  selected
-                    ? "bg-accent text-dark border-primary shadow-md"
-                    : "bg-background text-dark border-gray hover:bg-accent/70"
-                }`}
-              >
-                <input
-                  id={id}
-                  type="checkbox"
-                  className="hidden"
-                  checked={selected}
-                  onChange={() => onToggleService(index, service)}
-                />
-                {service}
-              </label>
-            );
-          })}
-        </div>
       </div>
     </div>
   );

@@ -90,7 +90,7 @@ export default function ContactPrompt({
                     Unsure about something?
                   </p>
                   <p className="text-xs text-neutral-600">
-                    DM on Instagram or email me, I will reply promptly.
+                    DM on Instagram or email us, we will reply promptly.
                   </p>
                 </div>
                 <button
@@ -111,7 +111,7 @@ export default function ContactPrompt({
                     <Mail className="h-4 w-4" aria-hidden />
                     <div className="text-left">
                       <p className="text-sm font-medium leading-tight">
-                        Email me
+                        Email us
                       </p>
                       <p className="text-xs text-neutral-600 leading-tight">
                         {email}
