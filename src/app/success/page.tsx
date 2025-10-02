@@ -30,7 +30,7 @@ function SuccessContent() {
         </div>
 
         {/* Main Message */}
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-heading mb-4">
+        <h1 className="text-3xl md:text-4xl font-serif  text-heading mb-4">
           Request Submitted Successfully!
         </h1>
         
@@ -44,13 +44,13 @@ function SuccessContent() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={handleNewRequest}
-            className="flex-1 min-w-[200px] border-2 border-primary text-dark px-8 py-3 rounded-md hover:bg-accent transition"
+            className="flex-1 min-w-[200px] border-2 border-primary text-dark px-8 py-3 rounded-full hover:bg-accent transition"
           >
             Submit Another Request
           </button>
           <button
             onClick={handleGoHome}
-            className="flex-1 min-w-[200px] bg-primary text-light font-semibold py-3 px-8 rounded-md hover:bg-primaryHover transition"
+            className="flex-1 min-w-[200px] bg-primary text-light font-semibold py-3 px-8 rounded-full hover:bg-primaryHover transition"
           >
             Return to Home
           </button>

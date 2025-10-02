@@ -4,9 +4,10 @@ export const EventSchema = z.object({
   eventType: z.string().min(1),
   date: z.string().min(1),
   time: z.string().min(1),
-  location: z.string().optional().default(""),
   people: z.coerce.number().int().min(1).max(50),
   services: z.array(z.enum(["makeup", "hair", "combo"])),
+  locationType: z.enum(["studio", "onsite"]),
+  locationAddress: z.string().optional(),
 });
 
 export const QuoteSchema = z.object({
@@ -16,7 +17,6 @@ export const QuoteSchema = z.object({
     name: z.string().min(1),
     email: z.string().email(),
     phone: z.string().min(7),
-    address: z.string().min(3),
     notes: z.string().optional(),
   }),
   recaptchaToken: z.string().min(1),

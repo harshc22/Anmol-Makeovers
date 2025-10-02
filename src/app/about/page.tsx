@@ -47,13 +47,10 @@ export default function AboutPage() {
                 alt="Editorial beauty portrait by Anmol"
                 fill
                 sizes="(min-width: 1024px) 520px, 100vw"
-                className="object-cover"
+                className="object-cover no-select"
                 priority
               />
             </div>
-
-            {/* decorative corner circle — keep it off on phones */}
-            <span className="pointer-events-none absolute -right-6 -top-6  h-24 w-24 rounded-full border-2 border-gray/40" />
           </div>
         </div>
       </section>
@@ -85,7 +82,7 @@ export default function AboutPage() {
           </div>
 
           <div className="md:col-span-6">
-            <p className="max-w-lg text-lg text-dark/90">
+            <p className="font-serif text-2xl leading-[1.35] text-dark md:text-[28px]">
               Ready to tell your story? Browse available services, then book a
               free consultation. Let&apos;s bring your beauty vision to life.
             </p>
@@ -128,7 +125,7 @@ export default function AboutPage() {
               alt="Soft glam portrait"
               width={1400}
               height={900}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover no-select"
             />
           </div>
           <div className="overflow-hidden rounded-3xl">
@@ -137,7 +134,7 @@ export default function AboutPage() {
               alt="Editorial beauty closeup"
               width={1400}
               height={900}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover no-select"
             />
           </div>
         </div>

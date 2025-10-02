@@ -116,7 +116,7 @@
   .text-light {
     color: #ffffff;
   }
-  .text-pink{
+  .text-pink {
     color: #ffc2d1;
   }
 
@@ -143,5 +143,15 @@
   }
   .swiper-pagination-bullet-active {
     background: #fb6f92;
+  }
+
+  .custom-focus-ring:focus {
+    --tw-ring-color: #fb6f92;
+  }
+
+  .no-select {
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
 }

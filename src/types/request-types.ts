@@ -1,13 +1,16 @@
 export type MakeupType = "Bridal" | "Non-Bridal";
+export type ReadyLocationType = "studio" | "onsite";
 
 export interface EventData {
   id: string; 
   eventType: string;
   date: string;
   time: string;
-  location: string;
   people: string;
   services: string[];
+  locationType: ReadyLocationType;   
+  locationAddress: string; 
+  locationPlaceId?: string; // optional, only for onsite with Google Places
 }
 
 export interface BridalEventData {
@@ -15,7 +18,9 @@ export interface BridalEventData {
   eventType: string;
   date: string;
   time: string;
-  location: string;
+  locationType: ReadyLocationType;
+  locationAddress: string;
+  locationPlaceId?: string;        
   // No services field - bridal automatically includes makeup and hair
 }
 
@@ -23,7 +28,6 @@ export interface ContactInfo {
   name: string;
   email: string;
   phone: string;
-  address: string;
   notes?: string;
 }
 
@@ -38,12 +42,16 @@ export type NonServiceField =
   | "eventType"
   | "date"
   | "time"
-  | "location"
-  | "people";
+  | "people"
+  | "locationType"
+  | "locationAddress"
+  | "locationPlaceId";
 
 export type BridalEventField =
   | "eventType"
   | "date"
   | "time"
-  | "location"
+  | "locationType"
+  | "locationAddress"
+  | "locationPlaceId"
   ;

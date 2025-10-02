@@ -72,7 +72,6 @@ export function buildEmail(
     ` • Name    : ${parsed.contact.name}`,
     ` • Email   : ${parsed.contact.email}`,
     ` • Phone   : ${parsed.contact.phone}`,
-    ` • Address : ${parsed.contact.address}`,
     ` • Notes   : ${parsed.contact.notes?.trim() || "-"}`,
     "",
     "Events",
@@ -85,17 +84,12 @@ export function buildEmail(
       const peopleCount =
         typeof e.people === "string" ? Number(e.people) : e.people;
 
-      const lineItems = e.lines
-        .map((l) => `    • ${l.label} — ${money(l.amount_cents)}`)
-        .join("\n");
-
       return [
         `  ${i + 1}. ${e.eventType || "Event"}`,
-        `     Date/Time : ${formatDateTime(e.date, e.time)}`,
-        `     Location  : ${e.location}`,
+        `     Ready Date/Time : ${formatDateTime(e.date, e.time)}`,
+        `     Ready Location  : ${e.locationType === "studio" ? "In studio" : e.locationAddress || "Onsite (address not provided)"}`,
         `     People    : ${peopleCount}`,
         `     Services  : ${servicesList}`,
-        `     Line Items:\n${lineItems}`,
         `     Subtotal  : ${money(e.event_subtotal_cents)}`,
       ].join("\n");
     })

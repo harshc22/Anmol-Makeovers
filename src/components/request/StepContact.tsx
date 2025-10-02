@@ -61,14 +61,6 @@ export default function StepContact({
           onChange={(e) => handleChange("phone", e.target.value)}
           className="w-full text-dark transition-colors"
         />
-        <input
-          type="text"
-          placeholder="Street Address"
-          ref={addressInputRef}
-          value={contactInfo.address}
-          onChange={(e) => handleChange("address", e.target.value)}
-          className="w-full text-dark transition-colors"
-        />
       </div>
 
       <textarea

@@ -14,7 +14,6 @@ import StepNonBridalCount from "@/components/request/StepNonBridalCount";
 import StepNonBridalEvents from "@/components/request/StepNonBridalEvents";
 import StepBridalEvents from "@/components/request/StepBridalEvents";
 import StepContact from "@/components/request/StepContact";
-import { useGoogleAddressAutocomplete } from "@/hooks/useGoogleAddressAutocomplete";
 import { validateEventsComplete, validateBridalEventsComplete } from "@/lib/request/validation";
 import { toast } from "sonner";
 const toServiceCode = (s: string) =>
@@ -44,9 +43,10 @@ export default function RequestQuote() {
     eventType: "",
     date: "",
     time: "",
-    location: "",
     people: "",
     services: [],
+    locationType: "studio", // default to studio
+    locationAddress: "",
   });
 
   const [events, setEvents] = useState<EventData[]>([makeEvent()]);
@@ -58,14 +58,14 @@ export default function RequestQuote() {
     eventType: "",
     date: "",
     time: "",
-    location: "",
+    locationType: "studio", // default to studio
+    locationAddress: "",
   });
   const [bridalEvents, setBridalEvents] = useState<BridalEventData[]>([makeBridalEvent()]);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: "",
     email: "",
     phone: "",
-    address: "",
     notes: "",
   });
 
@@ -83,12 +83,6 @@ export default function RequestQuote() {
   const today = new Date().toISOString().split("T")[0];
   const addressInputRef = useRef<HTMLInputElement | null>(null);
 
-  useGoogleAddressAutocomplete(
-    step,
-    contactInfo,
-    (updater) => setContactInfo(updater(contactInfo)),
-    addressInputRef
-  );
 
   // navigation handlers
   const goNextFromType = () => {
@@ -132,23 +126,24 @@ export default function RequestQuote() {
             eventType: e.eventType.trim(),
             date: e.date,
             time: e.time,
-            location: (e.location || contactInfo.address).trim(),
             people: 1,
+            locationType: e.locationType,
+            locationAddress: e.locationAddress,
             services: ["makeup", "hair"], // Auto-include for bridal
           }))
         : events.map((e) => ({
             eventType: e.eventType.trim(),
             date: e.date,
             time: e.time,
-            location: (e.location || contactInfo.address).trim(),
             people: Number(e.people),
+            locationType: e.locationType,
+            locationAddress: e.locationAddress,
             services: e.services.map(toServiceCode),
           })),
       contact: {
         name: contactInfo.name.trim(),
         email: contactInfo.email.trim(),
         phone: contactInfo.phone.replace(/\D/g, ""), // digits only
-        address: contactInfo.address.trim(),
         notes: contactInfo.notes?.trim() || undefined,
       },
       recaptchaToken,
@@ -193,7 +188,7 @@ export default function RequestQuote() {
 
   return (
     <section className="bg-background pt-25 min-h-screen flex items-center justify-center px-4 py-16">
-      <div className="bg-white p-10 rounded-3xl shadow-lg max-w-lg w-full border border-gray space-y-8">
+      <div className="bg-white p-4 md:p-10 rounded-3xl shadow-lg max-w-lg w-full border border-gray space-y-8">
         {step === Step.SelectType && (
           <StepSelectType
             selected={selected}

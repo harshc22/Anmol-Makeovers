@@ -7,7 +7,6 @@ import { createSupabaseClient } from "@/lib/quote/db";
 import { loadCatalog, computeBreakdown } from "@/lib/quote/pricing";
 import { buildEmail, getTransporter } from "@/lib/quote/email";
 import type { QuoteRequest } from "@/lib/quote/types";
-import { money } from "@/lib/utils/money";
 
 export async function POST(req: NextRequest) {
   try {
