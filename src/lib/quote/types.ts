@@ -3,6 +3,7 @@ import type { EventSchema, QuoteSchema } from "./schema";
 
 export type ServiceType = "Bridal" | "Non-Bridal";
 export type Service = "makeup" | "hair" | "combo";
+export type LocationType = "studio" | "onsite";
 
 export type EventInput = z.infer<typeof EventSchema>;
 export type QuoteRequest = z.infer<typeof QuoteSchema>;
@@ -21,6 +22,8 @@ export interface EventBreakdown {
   people: number;
   services: Service[];
   event_subtotal_cents: number;
+  locationType: LocationType;
+  locationAddress: string;
 }
 
 export interface PriceCatalogRow {

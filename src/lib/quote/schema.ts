@@ -6,6 +6,8 @@ export const EventSchema = z.object({
   time: z.string().min(1),
   people: z.coerce.number().int().min(1).max(50),
   services: z.array(z.enum(["makeup", "hair", "combo"])),
+  locationType: z.enum(["studio", "onsite"]),
+  locationAddress: z.string().optional(),
 });
 
 export const QuoteSchema = z.object({

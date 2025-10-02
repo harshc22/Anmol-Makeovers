@@ -44,9 +44,10 @@ export default function RequestQuote() {
     eventType: "",
     date: "",
     time: "",
-    location: "",
     people: "",
     services: [],
+    locationType: "studio", // default to studio
+    locationAddress: "",
   });
 
   const [events, setEvents] = useState<EventData[]>([makeEvent()]);
@@ -58,7 +59,8 @@ export default function RequestQuote() {
     eventType: "",
     date: "",
     time: "",
-    location: "",
+    locationType: "studio", // default to studio
+    locationAddress: "",
   });
   const [bridalEvents, setBridalEvents] = useState<BridalEventData[]>([makeBridalEvent()]);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
@@ -132,6 +134,8 @@ export default function RequestQuote() {
             date: e.date,
             time: e.time,
             people: 1,
+            locationType: e.locationType,
+            locationAddress: e.locationAddress,
             services: ["makeup", "hair"], // Auto-include for bridal
           }))
         : events.map((e) => ({
@@ -139,6 +143,8 @@ export default function RequestQuote() {
             date: e.date,
             time: e.time,
             people: Number(e.people),
+            locationType: e.locationType,
+            locationAddress: e.locationAddress,
             services: e.services.map(toServiceCode),
           })),
       contact: {
@@ -189,7 +195,7 @@ export default function RequestQuote() {
 
   return (
     <section className="bg-background pt-25 min-h-screen flex items-center justify-center px-4 py-16">
-      <div className="bg-white p-10 rounded-3xl shadow-lg max-w-lg w-full border border-gray space-y-8">
+      <div className="bg-white p-4 md:p-10 rounded-3xl shadow-lg max-w-lg w-full border border-gray space-y-8">
         {step === Step.SelectType && (
           <StepSelectType
             selected={selected}

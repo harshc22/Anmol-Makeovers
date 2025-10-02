@@ -86,7 +86,8 @@ export function buildEmail(
 
       return [
         `  ${i + 1}. ${e.eventType || "Event"}`,
-        `     Date/Time : ${formatDateTime(e.date, e.time)}`,
+        `     Ready Date/Time : ${formatDateTime(e.date, e.time)}`,
+        `     Ready Location  : ${e.locationType === "studio" ? "In studio" : e.locationAddress || "Onsite (address not provided)"}`,
         `     People    : ${peopleCount}`,
         `     Services  : ${servicesList}`,
         `     Subtotal  : ${money(e.event_subtotal_cents)}`,

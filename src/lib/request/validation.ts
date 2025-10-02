@@ -10,7 +10,9 @@ export function validateEventsComplete(events: EventData[]): boolean {
       ev.date.trim() &&
       ev.time.trim() &&
       ev.people &&
-      ev.services.length > 0
+      ev.services.length > 0 &&
+      ev.locationType &&
+      (ev.locationType === "studio" || (ev.locationType === "onsite" && ev.locationAddress.trim()))
   );
 }
 
@@ -19,7 +21,9 @@ export function validateBridalEventsComplete(events: BridalEventData[]): boolean
     (ev) =>
       ev.eventType.trim() &&
       ev.date.trim() &&
-      ev.time.trim()
+      ev.time.trim() &&
+      ev.locationType &&
+      (ev.locationType === "studio" || (ev.locationType === "onsite" && ev.locationAddress.trim()))
   );
 }
 

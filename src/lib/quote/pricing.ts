@@ -100,6 +100,8 @@ export function computeBreakdown(
       eventType: e.eventType,
       date: e.date,
       time: e.time,
+      locationType: e.locationType,
+      locationAddress: e.locationAddress || "In studio",
       people: typeof e.people === "string" ? Number(e.people) : e.people,
       services: e.services,
       event_subtotal_cents: eventSubtotal,
