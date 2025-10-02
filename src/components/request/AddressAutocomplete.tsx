@@ -9,8 +9,8 @@ type Props = {
   defaultValue?: string;
   country?: string; // e.g. "ca"
   onSelect: (v: { address: string; placeId: string }) => void;
-  minChars?: number;   
-  debounceMs?: number; 
+  minChars?: number;
+  debounceMs?: number;
 };
 
 export default function AddressAutocomplete({
@@ -24,13 +24,16 @@ export default function AddressAutocomplete({
 }: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const acRef = useRef<google.maps.places.Autocomplete | null>(null);
-  const placeChangedListenerRef = useRef<google.maps.MapsEventListener | null>(null);
-  const inputListenerRef = useRef<((e: Event) => void) | null>(null);
-  const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null);
+  const placeChangedListenerRef = useRef<google.maps.MapsEventListener | null>(
+    null
+  );
+  const inputListenerRef = useRef<EventListener | null>(null);
+  const sessionTokenRef =
+    useRef<google.maps.places.AutocompleteSessionToken | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    let debounceTimer: number | undefined;
+    let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 
     getMapsLoader()
       .load()
@@ -41,40 +44,42 @@ export default function AddressAutocomplete({
 
         const maybeInitAutocomplete = () => {
           if (acRef.current || !inputRef.current) return;
-
           const val = inputRef.current.value.trim();
           if (val.length < minChars) return;
 
-          // Create a session token when we actually instantiate the widget
-          sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken();
+          sessionTokenRef.current =
+            new google.maps.places.AutocompleteSessionToken();
 
-          acRef.current = new google.maps.places.Autocomplete(inputRef.current, {
-            fields: ["place_id", "formatted_address"], // minimal fields
-            types: ["address"],                         // address-only predictions
-            componentRestrictions: { country },
-          });
+          acRef.current = new google.maps.places.Autocomplete(
+            inputRef.current,
+            {
+              fields: ["place_id", "formatted_address"],
+              types: ["address"],
+              componentRestrictions: { country },
+            }
+          );
 
-          // Attach session token (supported at runtime; TS doesn't know)
-          // @ts-expect-error
+          // @ts-expect-error - setOptions supports { sessionToken } at runtime
           acRef.current.setOptions({ sessionToken: sessionTokenRef.current });
 
-          placeChangedListenerRef.current = acRef.current.addListener("place_changed", () => {
-            const place = acRef.current!.getPlace();
-            const placeId = place.place_id ?? "";
-            const address = place.formatted_address || inputRef.current!.value || "";
-            if (placeId && address) onSelect({ address, placeId });
-
-            // End this token after selection; a new focus/typing can create another
-            sessionTokenRef.current = null;
-          });
+          placeChangedListenerRef.current = acRef.current.addListener(
+            "place_changed",
+            () => {
+              const place = acRef.current!.getPlace();
+              const placeId = place.place_id ?? "";
+              const address =
+                place.formatted_address || inputRef.current!.value || "";
+              if (placeId && address) onSelect({ address, placeId });
+              sessionTokenRef.current = null;
+            }
+          );
         };
 
-        const onInput = () => {
-          if (debounceTimer) window.clearTimeout(debounceTimer);
-          debounceTimer = window.setTimeout(maybeInitAutocomplete, debounceMs) as any;
+        const onInput: EventListener = () => {
+          if (debounceTimer) clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(maybeInitAutocomplete, debounceMs);
         };
 
-        // If prefilled (e.g., back nav) and long enough, instantiate immediately
         if (el.value.trim().length >= minChars) maybeInitAutocomplete();
 
         el.addEventListener("input", onInput);
@@ -86,6 +91,7 @@ export default function AddressAutocomplete({
       if (inputRef.current && inputListenerRef.current) {
         inputRef.current.removeEventListener("input", inputListenerRef.current);
       }
+      if (debounceTimer) clearTimeout(debounceTimer);
       placeChangedListenerRef.current?.remove();
       acRef.current = null;
     };
