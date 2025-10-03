@@ -77,6 +77,12 @@ function codesFor(
   return [];
 }
 
+function getPlaceIdFromEvent(ev: unknown): string | undefined {
+  if (!ev || typeof ev !== "object") return undefined;
+  const v = (ev as Record<string, unknown>)["locationPlaceId"];
+  return typeof v === "string" && v.trim() ? v : undefined;
+}
+
 export async function computeBreakdown(
   parsed: QuoteRequest,
   catalog: Catalog
@@ -113,7 +119,7 @@ export async function computeBreakdown(
 
       if (e.locationType === "onsite") {
         const dist = await distanceFromStudioKm({
-          destinationPlaceId: (e as any).locationPlaceId ?? undefined,
+          destinationPlaceId: getPlaceIdFromEvent(e),
           destinationAddress: e.locationAddress ?? undefined,
         });
 
