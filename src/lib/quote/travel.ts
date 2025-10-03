@@ -1,5 +1,3 @@
-import type { QuoteRequest } from "./types";
-
 const GOOGLE_MAPS_API = "https://maps.googleapis.com/maps/api/distancematrix/json";
 
 const STUDIO_LAT = Number(process.env.STUDIO_LAT);

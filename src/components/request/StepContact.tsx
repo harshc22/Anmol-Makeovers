@@ -21,7 +21,6 @@ export default function StepContact({
   setContactInfo,
   onBack,
   onSubmit,
-  addressInputRef,
   isSubmitting,
   recaptchaToken,
   setRecaptchaToken,
