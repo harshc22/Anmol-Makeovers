@@ -15,7 +15,7 @@ type Props = {
 
 export default function AddressAutocomplete({
   inputId,
-  placeholder = "Street, City, Province, Postal code",
+  placeholder = "Start typing an address for autofill",
   defaultValue,
   country = "ca",
   onSelect,

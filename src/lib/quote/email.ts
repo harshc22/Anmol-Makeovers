@@ -3,16 +3,13 @@ import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { format, parseISO } from "date-fns";
 import type { EventBreakdown, QuoteRequest } from "./types";
 import { money } from "@/lib/utils/money";
+import { TRAVEL_THRESHOLD_KM } from "./distance";
 
 function formatDateTime(dateStr: string, timeStr: string): string {
   try {
-    // Parse the date string (YYYY-MM-DD format) and combine with time
     const date = parseISO(`${dateStr}T${timeStr}`);
-    
-    // Format with date-fns - much cleaner!
     return format(date, "do MMMM',' yyyy 'at' h:mm a");
-  } catch (error) {
-    // Fallback to original format if parsing fails
+  } catch {
     return `${dateStr} ${timeStr}`;
   }
 }
@@ -33,19 +30,29 @@ export function getTransporter(): Transporter<SMTPTransport.SentMessageInfo> {
   return transporter;
 }
 
-function formatServices(svcs: string[] | undefined): string {
+function formatServices(svcs: readonly unknown[] | undefined): string {
   if (!svcs || svcs.length === 0) return "-";
-  // normalize casing like ["Makeup","Hair"] or ["makeup","hair"]
   return svcs
-    .map((s) => s.toString().trim())
+    .map((s) => String(s).trim())
     .filter(Boolean)
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
     .join(", ");
 }
 
+type EventTravelExtras = {
+  travel_fee_cents?: number;
+  travel_distance_km?: number;
+  travel_distance_text?: string;
+  travel_threshold_km?: number;
+};
+
+type EventForEmail = EventBreakdown & Partial<EventTravelExtras>;
+
 export function buildEmail(
   parsed: QuoteRequest,
-  breakdown: EventBreakdown[],
+  breakdown: EventForEmail[],
+  services_total_cents: number,
+  travel_total_cents: number,
   total_cents: number
 ): { subject: string; text: string; from: string; to: string } {
   const submittedAt = new Date().toLocaleString("en-CA", {
@@ -77,30 +84,73 @@ export function buildEmail(
     "Events",
   ];
 
+  const renderTravel = (e: EventForEmail) => {
+    // Only show travel for on-site events
+    if (e.locationType !== "onsite") return null;
+
+    const feePresent = typeof e.travel_fee_cents === "number";
+    const fee = e.travel_fee_cents ?? 0;
+
+    const distText =
+      e.travel_distance_text ??
+      (typeof e.travel_distance_km === "number"
+        ? `${e.travel_distance_km.toFixed(1)} km`
+        : undefined);
+
+    const threshold = e.travel_threshold_km ?? TRAVEL_THRESHOLD_KM ?? 10;
+
+    if (feePresent) {
+      if (fee > 0) {
+        return `     Travel   : ${money(fee)} (distance ${distText ?? "—"}; first ${threshold} km included)`;
+      }
+      // fee is 0; could still show distance if known
+      if (distText) {
+        return `     Travel   : Included (distance ${distText}; first ${threshold} km included)`;
+      }
+      return `     Travel   : Included (within ${threshold} km)`;
+    }
+
+    // No fee computed (sync breakdown or lookup failed)
+    return `     Travel   : Pending distance check`;
+  };
+
   // EVENTS
   const eventsText = breakdown
     .map((e, i) => {
-      const servicesList = formatServices(e.services as unknown as string[]);
+      const servicesList = formatServices(e.services);
       const peopleCount =
         typeof e.people === "string" ? Number(e.people) : e.people;
 
-      return [
+      const lines = [
         `  ${i + 1}. ${e.eventType || "Event"}`,
         `     Ready Date/Time : ${formatDateTime(e.date, e.time)}`,
-        `     Ready Location  : ${e.locationType === "studio" ? "In studio" : e.locationAddress || "Onsite (address not provided)"}`,
-        `     People    : ${peopleCount}`,
-        `     Services  : ${servicesList}`,
-        `     Subtotal  : ${money(e.event_subtotal_cents)}`,
-      ].join("\n");
+        `     Ready Location  : ${
+          e.locationType === "studio"
+            ? "In studio"
+            : e.locationAddress || "On-site (address not provided)"
+        }`,
+        `     People   : ${peopleCount}`,
+        `     Services : ${servicesList}`,
+        `     Subtotal : ${money(e.event_subtotal_cents)}`,
+      ];
+
+      const travelLine = renderTravel(e);
+      if (travelLine) lines.push(travelLine);
+
+      return lines.join("\n");
     })
     .join("\n\n");
 
-  const footer = [
+  // TOTALS
+  const totalsBlock = [
     "",
-    `TOTAL: ${money(total_cents)}`,
+    "Totals",
+    ` • Services : ${money(services_total_cents)}`,
+    ...(travel_total_cents > 0 ? [` • Travel   : ${money(travel_total_cents)}`] : []),
+    ` • Grand    : ${money(total_cents)}`,
   ].join("\n");
 
-  const text = [...headerLines, eventsText, footer].join("\n");
+  const text = [...headerLines, eventsText, totalsBlock].join("\n");
 
   return { subject, text, from, to: process.env.ADMIN_EMAIL as string };
 }

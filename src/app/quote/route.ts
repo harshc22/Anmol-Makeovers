@@ -39,11 +39,13 @@ export async function POST(req: NextRequest) {
     }
 
     const catalog = await loadCatalog(supabase);
-    const { breakdown, total_cents } = computeBreakdown(parsed, catalog);
+    const { breakdown, services_total_cents, travel_total_cents, total_cents } = await computeBreakdown(parsed, catalog);
 
     const { subject, text, from, to } = buildEmail(
       parsed,
       breakdown,
+      services_total_cents,
+      travel_total_cents,
       total_cents
     );
 

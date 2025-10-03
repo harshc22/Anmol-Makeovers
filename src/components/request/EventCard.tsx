@@ -20,6 +20,7 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
     // prevent stale addresses lingering when user flips back to studio
     if (type === "studio" && event.locationAddress) {
       onChange(index, "locationAddress", "");
+      onChange(index, "locationPlaceId", "");
     }
   };
 
@@ -158,7 +159,6 @@ function EventCard({ index, event, today, onChange, onToggleService }: Props) {
               onSelect={({ address, placeId }) => {
                 onChange(index, "locationAddress", address);
                 onChange(index, "locationPlaceId", placeId);
-                // (optional) you can trigger a fee preview here by calling your API
               }}
             />
             <p className="text-xs text-muted">
