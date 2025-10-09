@@ -8,12 +8,12 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="bg-background px-4 sm:px-6 py-4 shadow-md text-dark border-b border-gray fixed top-0 right-0 left-0 z-50">
-      <div className="flex items-center justify-between max-w-7xl mx-auto">
+    <nav className="bg-background px-4 sm:px-6 py-1 sm:py-4 shadow-md text-dark border-b border-gray fixed top-0 right-0 left-0 z-50">
+      <div className="flex items-center justify-between max-w-7xl mx-auto h-auto">
         {/* Logo */}
         <Link
           href="/"
-          className="text-3xl sm:text-3xl md:text-5xl font-serif text-heading hover:text-primary transition"
+          className="text-2xl sm:text-3xl md:text-5xl font-serif text-heading hover:text-primary transition"
         >
           ANMOL MAKEOVERS
         </Link>

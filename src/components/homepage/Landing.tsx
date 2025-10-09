@@ -3,7 +3,7 @@ export default function Landing() {
     <section className="bg-background text-dark px-4 sm:px-8 py-8 sm:py-10">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-y-10 md:gap-12 items-center pt-20">
         <div>
-          <h1 className="font-serif text-[14vw] leading-[0.85] tracking-tight sm:text-[10vw] lg:text-[7.5rem] mb-12 mt-6">
+          <h1 className="font-serif text-[14vw] leading-[0.85] tracking-tight sm:text-[10vw] lg:text-[7.5rem] mb-12">
             Enhancing Your Natural Beauty
           </h1>
           <p className="max-w-2xl font-serif text-2xl leading-[1.35] text-dark/70 md:text-[28px] mb-6 mt-6">
