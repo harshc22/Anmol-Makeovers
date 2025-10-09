@@ -15,7 +15,7 @@ export default function Navbar() {
           href="/"
           className="text-3xl sm:text-3xl md:text-5xl font-serif text-heading hover:text-primary transition"
         >
-          ANMOL BENIPAL
+          ANMOL MAKEOVERS
         </Link>
 
 
