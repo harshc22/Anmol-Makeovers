@@ -41,7 +41,7 @@ export default function Footer() {
 
         {/* Right: Copyright */}
         <div className="text-sm text-gray-500 sm:text-right">
-          © {new Date().getFullYear()} Anmol Benipal. All rights reserved.
+          © {new Date().getFullYear()} Anmol Makeovers. All rights reserved.
         </div>
       </div>
     </footer>
